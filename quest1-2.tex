@@ -1,0 +1,78 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx} % to include pictures
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{breqn}
+\usepackage{amsfonts}
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2.5cm]{geometry}
+
+% Fancy layout
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% Footer
+\fancyfoot[C]{}
+\fancyfoot[R]{Page \thepage}
+% Ligne
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\section{Problème 1 (échiquier)}
+\subsection{Notations}
+\begin{itemize}
+\item n x n = dimension de l'échiquier
+\item $k_{1}$ = nombre de tours
+\item $k_{2}$ = nombre de fous
+\item $k_{3}$ = nombre de cavaliers
+
+\item m = ($k_{1}$ + $k_{2}$ + $k_{3}$)
+\item y = ($t_{1}, t'_{1}, ..., t_{k_{1}}, t'_{k_{1}}, f_{1}, f'_{1}, ..., f_{k_{2}}, f'_{k_{2}}, h_{1}, h'_{1}, ..., h_{k_{3}}, h'_{k_{3}}$)
+\end{itemize}
+
+\subsection{Question 1}
+\subsubsection{Variables}
+$$X = \{t_{i} : i \epsilon  \{1, ..., k_{1} \}, f_{i} : i \epsilon  \{1, ..., k_{2} \}, h_{i} : i \epsilon  \{1, ..., k_{3} \}, $$ 
+\hspace{10mm} $$t'_{i} : i \epsilon  \{1, ..., k_{1} \}, f'_{i} : i \epsilon  \{1, ..., k_{2} \}, h'_{i} : i \epsilon  \{1, ..., k_{3} \}$$
+
+\subsubsection{Domaine}
+$$D = \{1, ..., n \}^{2}$$
+
+\subsubsection{Contraintes}
+\begin{itemize}
+\item $ c_{1} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid \forall_{i,j} 1\leq i \neq j \leq m \rightarrow (V_{2i} \neq V_{2j}) \vee  (V_{2i+1} \neq V_{2j+1}) \} ) $
+
+\item $ c_{2} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid \forall_{i,j} 1\leq i \leq k_{1}, 1\leq j \leq m  \rightarrow (V_{2i} \neq V_{2j}) \wedge  (V_{2i+1} \neq V_{2j+1}) \} ) $
+
+\item $ c_{3} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid \forall_{i,j} k_{1}+1\leq i \leq k_{1}+k_{2}, 1\leq j \leq m  
+\rightarrow [ (V_{2i} \neq V_{2j}+k) \wedge  (V_{2i+1} \neq V_{2j+1}+k) \wedge  (V_{2i} \neq V_{2j}-k) \wedge  (V_{2i+1} \neq V_{2j+1}+k) ], k \epsilon \mathbb{Z}_{0} \} ) $
+
+\item $ c_{4} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid \forall_{i,j} k_{1}+k_{2}+1\leq i \leq k_{1}+k_{2}+k_{3}, 1\leq j \leq m  
+\rightarrow [ (V_{2i} \neq V_{2j}+k) \wedge  (V_{2i+1} \neq V_{2j+1}+l) \wedge  (V_{2i} \neq V_{2j}+l) \wedge  (V_{2i+1} \neq V_{2j+1}+k) ], k \epsilon \{-2, 2\}, l \epsilon \{-1, 1\} \} ) $
+
+\end{itemize}
+
+\subsection{Question 2}
+\subsubsection{Variables}
+$$X = \{t_{i} : i \epsilon  \{1, ..., k_{1} \}, f_{i} : i \epsilon  \{1, ..., k_{2} \}, h_{i} : i \epsilon  \{1, ..., k_{3} \}, $$ 
+\hspace{10mm} $$t'_{i} : i \epsilon  \{1, ..., k_{1} \}, f'_{i} : i \epsilon  \{1, ..., k_{2} \}, h'_{i} : i \epsilon  \{1, ..., k_{3} \}$$
+
+\subsubsection{Domaine}
+$$D = \{1, ..., n \}^{2}$$
+
+\subsubsection{Contraintes}
+\begin{itemize}
+\item $ c_{1} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid \forall_{i,j} 1\leq i \neq j \leq m \rightarrow (V_{2i} \neq V_{2j}) \vee  (V_{2i+1} \neq V_{2j+1}) \} ) $
+
+\item $ c_{2} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid (\forall_{i} 1\leq i \leq k_{1} \rightarrow \exists j \epsilon (1 \leq j \leq m) \mid (V_{2i} = V_{2j}) \vee  (V_{2i+1} = V_{2j+1}) )\} ) $
+
+\item $ c_{3} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid (\forall_{i} k_{1}+1\leq i \leq k_{1}+k_{2} \rightarrow \exists j \epsilon (1 \leq j \leq m) \mid [ (V_{2i} = V_{2j}+k) \wedge  (V_{2i+1} = V_{2j+1}+k) \vee  (V_{2i} = V_{2j}-k) \wedge  (V_{2i+1} = V_{2j+1}+k) ]), k \epsilon \mathbb{Z}_{0} \} ) $
+
+\item $ c_{4} = ( y, \{ (V_{1}, ..., V_{2m}) \epsilon  D^{2m} \mid (\forall_{i} k_{1}+k_{2}+1\leq i \leq k_{1}+k_{2}+k_{3} \rightarrow \exists j \epsilon (1 \leq j \leq m) \mid [ (V_{2i} = V_{2j}+k) \wedge  (V_{2i+1} = V_{2j+1}+l) \vee  (V_{2i} = V_{2j}+l) \wedge  (V_{2i+1} = V_{2j+1}+k) ]), k \epsilon \{-2, 2\}, l \epsilon \{-1, 1\} \} ) $
+
+\end{itemize}
+
+\end{document}
