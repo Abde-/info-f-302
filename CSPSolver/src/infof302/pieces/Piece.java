@@ -30,9 +30,7 @@ public class Piece {
 	 * 
 	 * @param piece piece avec laquelle checker la dependence
 	 */
-	public void checkDependency(Piece piece){
-	}
-	
+	public void checkDependency(Piece[] pieces){}
 	
 	/**
 	 * Méthode qui met à jour le model `model` avec les contraintes de la piece en question
@@ -40,7 +38,7 @@ public class Piece {
 	 * 
 	 * @param piece piece avec laquelle checker la dependence
 	 */	
-	public void checkIndependency(Piece piece){}
+	public void checkIndependency(Piece[] piece){}
 	
 	public void checkEqual(Piece piece){	
 		// contrainte 1: piece x différente piece y tq x != y
@@ -52,7 +50,6 @@ public class Piece {
 				)
 			.post();
 		
-	
 	}
 	
 	public IntVar getCoordX(){
@@ -61,6 +58,4 @@ public class Piece {
 	public IntVar getCoordY(){
 		return coordy;
 	}
-	
-	
 }

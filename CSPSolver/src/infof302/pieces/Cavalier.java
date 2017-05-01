@@ -20,60 +20,64 @@ public class Cavalier extends Piece{
 	}
 	
 	@Override
-	public void checkDependency(Piece piece){
-		super.checkEqual(piece);
+	public void checkDependency(Piece[] pieces){
+		
 		
 		// contrainte 4: i.x != j.x et i.y != j.y'
 		// pour toute pièce j tel que i != j
+		int[] k = {-2,2};
+		int[] l = {-2,2};
 		
-		
-		if (this != piece){
-			int[] k = {-2,2};
-			int[] l = {-2,2};
-		
-			for (int i : k){
-				for (int j : l){
-					Constraint cstxa = model.arithm(
-						model.intOffsetView(coordx, i),
-						"!=",
-						piece.coordx
+		for(Piece piece : pieces){
+			if (this != piece){
+				
+				// contrainte 1: checker que les 2 pieces se trouvent dans des positions différentes
+				checkEqual(piece);
+				
+				for (int i : k){
+					for (int j : l){
+						Constraint cstxa = model.arithm(
+							model.intOffsetView(coordx, i),
+							"!=",
+							piece.coordx
 						);
 				
-					Constraint cstya = model.arithm(
-						model.intOffsetView(coordy, j),
-						"!=",
-						piece.coordy
+						Constraint cstya = model.arithm(
+							model.intOffsetView(coordy, j),
+							"!=",
+							piece.coordy
 						);
 				
-					// i != i'+k et j != j'+l
-					model.and(
-						cstxa,cstya
+						// i != i'+k et j != j'+l
+						model.and(
+							cstxa,cstya
 						).post();
 				
-					cstxa = model.arithm(
+						cstxa = model.arithm(
 							model.intOffsetView(coordx, j),
 							"!=",
 							piece.coordx
 						);
 				
-					cstya = model.arithm(
+						cstya = model.arithm(
 							model.intOffsetView(coordy, i),
 							"!=",
 							piece.coordy
 						);
 				
-					// i != i'+l et j != j'+k
-					model.and(
-						cstxa,cstya
+						// i != i'+l et j != j'+k
+						model.and(
+							cstxa,cstya
 						).post();				
 			
+					}
 				}
 			}
 		}
 	}
 	
 	@Override
-	public void checkIndependency(Piece piece){
+	public void checkIndependency(Piece[] piece){
 		
 	}
 }

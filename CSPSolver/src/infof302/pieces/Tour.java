@@ -15,21 +15,26 @@ public class Tour extends Piece{
 	}
 
 	@Override
-	public void checkDependency(Piece piece){
-		super.checkEqual(piece);
+	public void checkDependency(Piece[] pieces){
 		
 		// contrainte 2: i.x != j.x et i.y != j.y'
 		// pour toute pièce j tel que i != j
-		if(this != piece){
-			model.and(
-				model.arithm(coordx, "!=", piece.coordx),
-				model.arithm(coordy, "!=", piece.coordy)
+		for(Piece piece : pieces){
+			
+			// contrainte 1: checker que les 2 pieces se trouvent dans des positions différentes
+			checkEqual(piece);
+			
+			if(this != piece){
+				model.and(
+					model.arithm(coordx, "!=", piece.coordx),
+					model.arithm(coordy, "!=", piece.coordy)
 				).post();
+			}
 		}
 	}
 	
 	@Override
-	public void checkIndependency(Piece piece){
+	public void checkIndependency(Piece[] piece){
 		
 	}
 }
