@@ -1,0 +1,52 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx} % to include pictures
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{breqn}
+\usepackage{amsfonts}
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2.5cm]{geometry}
+
+% Fancy layout
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% Footer
+\fancyfoot[C]{}
+\fancyfoot[R]{Page \thepage}
+% Ligne
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\section{Problème 4 (minimisation de cavaliers)}
+\subsection{Notations}
+\begin{itemize}
+\item n x n = dimension de l'échiquier
+\end{itemize}
+
+\subsection{Variables}
+\begin{equation}
+  \begin{split}
+    X = \{a_1, \dots, a_{n*n} \}
+  \end{split}
+\end{equation}
+
+\subsection{Domaine}
+$$D_a = \{ 0, 1 \}$$
+$$D_m = \mathbb{N}$$
+
+\subsubsection{Contraintes}
+\begin{itemize}
+\item Contrainte tel qu'il faut minimiser le nombre de cavaliers dans l'échiquier.
+  $$ c_1 = minimize(\sum_{k=1}^{n*n} a_k) $$
+  
+\item[•] Contrainte tel que chaque case doit être dominé ou occupé par un cavalier.
+  
+  $ c_2 = (a_1, \dots, a_{n*n} | \forall_i 1 \leq i \leq n \forall_j 1 \leq j \leq n, \exists k \in \{2,-2\}, \exists l \in \{1,-1\}, \\
+   a_{(i+k)*n +j +l}=1 \vee a_{(i+l)*n +j +k}=1 \vee a_{(i*n +j)} = 1) $ 
+\end{itemize}
+
+\end{document}
