@@ -1,6 +1,9 @@
 package infof302.pieces;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.Constraint;
+
+import infof302.CSPSolver;
 
 public class Fou extends Piece{
 
@@ -20,7 +23,7 @@ public class Fou extends Piece{
 	}
 	
 	@Override
-	public void checkDependency(Piece[] pieces){
+	public void checkIndependency(Piece[] pieces){
 		
 		// contrainte 3: pour toute piece i fou implique que les autres pieces j
 		// tq j != i -> i.x != j.x + k ou i.y != j.x +k
@@ -47,26 +50,32 @@ public class Fou extends Piece{
 			}
 		}
 	}
-	
+
 	@Override
-	public void checkIndependency(Piece[] pieces, int caseX, int caseY){
-		for(Piece piece : pieces){
-			checkEqual(piece);
-			if(this != piece){
-				for(int i = -this.domain; i < this.domain; ++i){
-					if(i != 0){
+	public Constraint inDomain(int caseX, int caseY) {
+		Constraint[] contraintes = new Constraint[]{};
+		
+		for(int i = -this.domain; i < this.domain; ++i){
+			if(i != 0){
+				contraintes = CSPSolver.addElement(contraintes,
 						model.and(
-							model.arithm(coordx, "=", piece.coordx, "+", i),
-							model.arithm(coordy, "!=", piece.coordy, "+", i)
-						).post();
-			
+								model.arithm(coordx, "=", caseX+i),
+								model.arithm(coordy, "=", caseY+i)
+								)
+						);
+				
+				contraintes = CSPSolver.addElement(contraintes,
 						model.and(
-							model.arithm(coordx, "!=", piece.coordx, "+", i),
-							model.arithm(coordy, "!=", piece.coordy, "-", i)
-						).post();
-					}
-				}
+							model.arithm(coordx, "=", caseX+i),
+							model.arithm(coordy, "=", caseY-i)
+						)
+				);
+				
 			}
 		}
+		
+		// renvoit la contrainte tel que la case (X,Y) se trouve dans le domaine du cavalier
+		return model.or(contraintes);	
 	}
+
 }

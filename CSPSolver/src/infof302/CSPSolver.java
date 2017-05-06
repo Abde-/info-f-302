@@ -1,6 +1,7 @@
 package infof302;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
@@ -17,6 +18,19 @@ public class CSPSolver {
 	private static int nbCavalier=0;
 	private static int nbPieces;
 	private static ArrayList<ArrayList<Character>> board;
+	
+	/**
+	 * Méthode pour rajouter élement e à l'array a.
+	 * 
+	 * @param a
+	 * @param e
+	 * @return
+	 */
+	public static Constraint[] addElement(Constraint[] a, Constraint e) {
+	    a  = Arrays.copyOf(a, a.length + 1);
+	    a[a.length - 1] = e;
+	    return a;
+	}
 	
 	private static void printSolution(String solution, int nbpieces){	
 		setBoard();
@@ -102,12 +116,87 @@ public class CSPSolver {
 		return true;
 	}
 	
+	/**
+	 * Résoudre le problème de l'indépendence.
+	 * 
+	 * @param model
+	 * @param pieces
+	 */
+	public static void checkIndependency(Model model, Piece... pieces){
+		// contraintes
+		for(int i = 0; i < nbPieces; ++i){
+			pieces[i].checkIndependency(pieces);
+		}
+	}
+	
+	/**
+	 * Résoudre le problème de la dépendence / domination.
+	 * 
+	 * @param model
+	 * @param pieces
+	 */
+	public static void checkDependency(Model model, Piece...pieces){
+		Constraint[] everyConstraint = new Constraint[]{};
+		
+		//d'abord checker qu'aucune pièce se trouve au même endroit
+		for (int i = 0; i < pieces.length; ++i){
+			for (int j = 0; j < pieces.length; ++j){
+				pieces[i].checkEqual(pieces[j]);
+			}
+		}
+		
+		/* 
+		 * pour chaque case de l'échiquier, checker les 4 contraintes->
+		 * 1 .- chaque case [i,j] est occupé par une pièce OU
+		 * 2 .- la case [i,j] est dominée par une tour OU
+		 * 3 .- la case [i,j] est dominée par un fou OU
+		 * 4 .- la case [i,j] est dominée par un cavalier OU
+		*/
+		
+		for(int i=1; i<=dimension; ++i){
+			for(int j=1; j<=dimension; ++j){
+				Constraint[] perPieceConstraint = new Constraint[]{};
+				
+				for (Piece piece : pieces){
+
+					Constraint constraint =
+							model.or(
+								piece.checkPieceExists(i,j),
+								piece.inDomain(i, j)
+							);
+
+					perPieceConstraint = addElement(perPieceConstraint,constraint);
+				}
+				
+				// cette contrainte represente que la case respecte toutes les contraintes
+				Constraint dominatedPiece = model.or(perPieceConstraint);
+				
+				everyConstraint = addElement(everyConstraint, dominatedPiece);
+			}
+		}
+
+		// checker que TOUTE case respecte toutes les contraintes
+		model.and(everyConstraint).post();
+		
+	}
+	
 	public static void main (String[] args){
+		/*
 		if(!setArgs(args)){
 			System.out.println("Pas de solutions");
 			return;
-		}
-
+		}*/
+		
+		// deso prab je vais mettre moi meme les paramètres, trop de trucs bizarres :/
+		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 		
+		nbTour = 1;
+		nbCavalier = 2;
+		nbFou = 2;
+		dimension = 4;
+		problem = "d";
+		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
+		
+		
 		nbPieces = nbTour+nbCavalier+nbFou;
 		
 		Model model = new Model();
@@ -125,29 +214,15 @@ public class CSPSolver {
 		}
 		
 		if(problem.equals("i")){
-			// contraintes
-			for(int i = 0; i < nbPieces; ++i){
-				piece[i].checkDependency(piece);
-			}
+			checkIndependency(model,piece);
 		}
 		else{
-			//ArrayList<> array
-			for(int i=0; i<dimension; ++i){
-				for(int j=0; j<dimension; ++j){
-					//????? je sais pas vmt quoi faire la ...
-					//Constraint u1 = 
-					//Constraint u3 = 
-					//Constraint u4 = 
-					//Constraint u5 = 
-					//model.or(u1, u2, u3, u4); pour la case i,j 
-					//array.push()
-					piece[i].checkIndependency(piece, i, j);
-				}
-			}
+			checkDependency(model,piece);
 		}
 		
 		Solution solution = model.getSolver().findSolution();
-		if (solution != null){
+		if (solution != null){	
+			System.out.println(solution.toString());
 			printSolution(solution.toString(), nbPieces);
 		}
 		else{

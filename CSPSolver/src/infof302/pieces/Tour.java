@@ -1,6 +1,9 @@
 package infof302.pieces;
 
+import java.util.ArrayList;
+
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.Constraint;
 
 public class Tour extends Piece{
 
@@ -16,7 +19,7 @@ public class Tour extends Piece{
 	}
 
 	@Override
-	public void checkDependency(Piece[] pieces){
+	public void checkIndependency(Piece[] pieces){
 		
 		// contrainte 2: i.x != j.x et i.y != j.y'
 		// pour toute pièce j tel que i != j
@@ -35,16 +38,13 @@ public class Tour extends Piece{
 	}
 	
 	@Override
-	public void checkIndependency(Piece[] pieces, int caseX, int caseY){
-
-		for(Piece piece : pieces){
-			checkEqual(piece);
-			if(this != piece){
-				model.or(
-					model.arithm(coordx, "=", caseX),
-					model.arithm(coordy, "=", caseY)
-				).post();
-			}
-		}
+	public Constraint inDomain(int caseX, int caseY){
+		
+		// renvoit le domaine tel que la case (X,Y) se trouve dans le domaine de la tour.
+		return model.or(
+				model.arithm(coordx, "=", caseX),
+				model.arithm(coordy, "=", caseY)
+				);
 	}
+
 }
