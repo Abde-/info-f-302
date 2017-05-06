@@ -1,7 +1,5 @@
 package infof302.pieces;
 
-import java.util.ArrayList;
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 

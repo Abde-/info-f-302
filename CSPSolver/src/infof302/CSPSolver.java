@@ -181,12 +181,13 @@ public class CSPSolver {
 	}
 	
 	public static void main (String[] args){
-		/*
-		if(!setArgs(args)){
+		
+		/*if(!setArgs(args)){
 			System.out.println("Pas de solutions");
 			return;
 		}*/
 		
+		//moi quand je mets en param : -d -n 4 -t 1 -f 2 -c 2, j'ai aucun problème
 		// deso prab je vais mettre moi meme les paramètres, trop de trucs bizarres :/
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 		
 		nbTour = 1;
@@ -195,7 +196,6 @@ public class CSPSolver {
 		dimension = 4;
 		problem = "d";
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
-		
 		
 		nbPieces = nbTour+nbCavalier+nbFou;
 		
