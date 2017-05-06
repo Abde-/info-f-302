@@ -16,6 +16,7 @@ public class Fou extends Piece{
 		
 		coordx = model.intVar("Fou(x)", 1, n);
 		coordy = model.intVar("Fou(y)", 1, n);
+
 	}
 	
 	@Override
@@ -48,7 +49,24 @@ public class Fou extends Piece{
 	}
 	
 	@Override
-	public void checkIndependency(Piece[] pieces){
-		
+	public void checkIndependency(Piece[] pieces, int caseX, int caseY){
+		for(Piece piece : pieces){
+			checkEqual(piece);
+			if(this != piece){
+				for(int i = -this.domain; i < this.domain; ++i){
+					if(i != 0){
+						model.and(
+							model.arithm(coordx, "=", piece.coordx, "+", i),
+							model.arithm(coordy, "!=", piece.coordy, "+", i)
+						).post();
+			
+						model.and(
+							model.arithm(coordx, "!=", piece.coordx, "+", i),
+							model.arithm(coordy, "!=", piece.coordy, "-", i)
+						).post();
+					}
+				}
+			}
+		}
 	}
 }

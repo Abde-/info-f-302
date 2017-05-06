@@ -12,6 +12,7 @@ public class Tour extends Piece{
 		
 		coordx = model.intVar("Tour(x)", 1, n);
 		coordy = model.intVar("Tour(y)", 1, n);
+
 	}
 
 	@Override
@@ -34,7 +35,16 @@ public class Tour extends Piece{
 	}
 	
 	@Override
-	public void checkIndependency(Piece[] piece){
-		
+	public void checkIndependency(Piece[] pieces, int caseX, int caseY){
+
+		for(Piece piece : pieces){
+			checkEqual(piece);
+			if(this != piece){
+				model.or(
+					model.arithm(coordx, "=", caseX),
+					model.arithm(coordy, "=", caseY)
+				).post();
+			}
+		}
 	}
 }

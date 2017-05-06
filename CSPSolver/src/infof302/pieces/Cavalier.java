@@ -1,8 +1,5 @@
 package infof302.pieces;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 
@@ -77,7 +74,44 @@ public class Cavalier extends Piece{
 	}
 	
 	@Override
-	public void checkIndependency(Piece[] piece){
-		
+	public void checkIndependency(Piece[] piece, int caseX, int caseY){
+		int[] k = {-2,2};
+		int[] l = {-2,2};
+		for(Piece pieces : piece){
+			if (this != pieces){
+				checkEqual(pieces);
+				
+				for (int i : k){
+					for (int j : l){
+						Constraint cstxa = model.arithm(
+							model.intOffsetView(coordx, i), "=", caseX
+						);
+				
+						Constraint cstya = model.arithm(
+							model.intOffsetView(coordy, j),"=",caseY
+						);
+				
+						// i != i'+k et j != j'+l
+						model.and(
+							cstxa,cstya
+						).post();
+				
+						cstxa = model.arithm(
+							model.intOffsetView(coordx, j),"=",caseX
+						);
+				
+						cstya = model.arithm(
+							model.intOffsetView(coordy, i),"=",caseY
+						);
+				
+						// i != i'+l et j != j'+k
+						model.or(
+							cstxa,cstya
+						).post();				
+			
+					}
+				}
+			}
+		}
 	}
 }

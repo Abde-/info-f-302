@@ -38,7 +38,7 @@ public class Piece {
 	 * 
 	 * @param piece piece avec laquelle checker la dependence
 	 */	
-	public void checkIndependency(Piece[] piece){}
+	public void checkIndependency(Piece[] piece, int caseX, int caseY){}
 	
 	public void checkEqual(Piece piece){	
 		// contrainte 1: piece x différente piece y tq x != y
@@ -50,6 +50,10 @@ public class Piece {
 				)
 			.post();
 		
+	}
+	
+	public void checkPieceExists(int caseX, int caseY){
+		//pour savoir si une case aux coord (X,Y) existe
 	}
 	
 	public IntVar getCoordX(){
