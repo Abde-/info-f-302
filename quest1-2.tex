@@ -74,30 +74,24 @@ $$D = \{1, ..., n \}$$
     $$c_{2} = (y, \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n,  u1_{i,j} \cup u2_{i,j} \cup u3_{i,j} \cup u4_{i,j})$$
     
     avec : \begin{itemize}
-    \item[•] $u1_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, v_{k} = i \wedge v_{k+1} = j\}$ \\
+    \item[•] $u1_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, v_{2k-1} = i \wedge v_{2k} = j\}$ \\
     \textit{La case \{i, j\} est occupée par une pièce}\\
    
    
-    \item[•] $u2_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \forall \mid \exists k \epsilon \{1, ..., m\}, v_{k} = i \vee v_{k+1} = j\}$ \\
+    \item[•] $u2_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \forall \mid \exists k \epsilon \{1, ..., m\}, v_{2k-1} = i \vee v_{2k} = j\}$ \\
     \textit{La case \{i, j\} est menacée par au moins une tour}\\
     
     
-    \item[•] $u3_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, p \epsilon\{-n, n \}, ((v_{k} = i+p \wedge v_{k+1} = j+p) \vee ((v_{k} = i-p \wedge v_{k+1} = j+p))) \}$ \\
+    \item[•] $u3_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, p \epsilon\{-n, n \}, ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))) \}$ \\
     \textit{La case \{i, j\} est menacée par au moins un fou}\\
     
     
     \item[•] $u4_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, p \epsilon \{-2, 2 \}, l \epsilon \{-1, 1\},
-    ((v_{k} = i+k \wedge v_{k+1} = j+l)  \vee ((v_{k} = i+l \wedge v_{k+1} = j+k)))\}$ \\
+    ((v_{2k-1} = i+k \wedge v_{2k} = j+l)  \vee ((v_{2k-1} = i+l \wedge v_{2k} = j+k)))\}$ \\
     \textit{La case \{i, j\} est menacée par au moins un cavalier}\\
     
     \end{itemize}
     
-    %$$[\forall_{j} 1 \leq j \leq m \rightarrow ((v_{2i-1} = w_{2j-1}) \wedge (v_{2i} = w_{2j}))]$$
-
-    %			$$\vee  ((v_{2i-1} = v_{2j-1}-k) \wedge (v_{2i} = v_{2j}+k)) k \epsilon \mathbb{Z}_{0}]$$
-  % $$ \vee [\forall_{i} k_{1}+k_{2}+1\leq j \leq k_{1}+k_{2}+k_{3} ((v_{2i-1} = v_{2j-1}+k) \wedge  (v_{2i} = v_{2j}+l))$$ 
-   	%			$$\vee  ((v_{2i-1} = v_{2j-1}+l) \wedge  (v_{2i} = v_{2j}+k)) k \epsilon \{-2, 2\}, l \epsilon \{-1, 1\}]\})$$
-
 \end{itemize}
 
 \end{document}
