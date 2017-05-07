@@ -25,12 +25,14 @@
 \subsection{Notations}
 \begin{itemize}
 \item n x n = dimension de l'échiquier
+\item y = $a_{1,1},\ldots, a_{1,n},a_{2,1}, \ldots,a_{2,n}, \ldots, a_{n,n} $
+\item z = $v_{1,1},\ldots, v_{1,n},v_{2,1}, \ldots,v_{2,n}, \ldots, v_{n,n} $
 \end{itemize}
 
 \subsection{Variables}
 \begin{equation}
   \begin{split}
-    X = \{a_1, \dots, a_{n*n} \}
+    X = \{a_{1,1},\ldots, a_{1,n},a_{2,1}, \ldots,a_{2,n}, \ldots, a_{n,n} \}
   \end{split}
 \end{equation}
 
@@ -38,15 +40,13 @@
 $$D_a = \{ 0, 1 \}$$
 $$D_m = \mathbb{N}$$
 
-\subsubsection{Contraintes}
-\begin{itemize}
-\item Contrainte tel qu'il faut minimiser le nombre de cavaliers dans l'échiquier.
-  $$ c_1 = minimize(\sum_{k=1}^{n*n} a_k) $$
-  
-\item[•] Contrainte tel que chaque case doit être dominé ou occupé par un cavalier.
-  
-  $ c_2 = (a_1, \dots, a_{n*n} | \forall_i 1 \leq i \leq n \forall_j 1 \leq j \leq n, \exists k \in \{2,-2\}, \exists l \in \{1,-1\}, \\
-   a_{(i+k)*n +j +l}=1 \vee a_{(i+l)*n +j +k}=1 \vee a_{(i*n +j)} = 1) $ 
-\end{itemize}
+\subsection{Contraintes}
+L'ensemble des contraintes est défini tel que chaque case doit être dominée ou occupée par un chevalier. 
+  $$ C = (y, \{z \hspace{0.1cm} | \hspace{0.1cm} \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n, \exists k \in \{2,-2\}, \exists l \in \{1,-1\}, a_{i+k,j+l}=1 \hspace{0.1cm} \vee \hspace{0.1cm} a_{i+l,j+k}=1 \hspace{0.1cm} \vee \hspace{0.1cm} a_{i,j)} = 1\}) $$ 
 
+\subsection{Fonction objective}
+
+La fonction objective de ce CSP est défini tel que: [expliquer]
+  $$ \phi = minimize(\sum_{j=1}^{n} \sum_{k}^n a_{j,k}) $$
+  
 \end{document}
