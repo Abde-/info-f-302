@@ -1,7 +1,11 @@
 package infof302;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
@@ -27,17 +31,19 @@ public class CSPSolver {
 	 * @param e
 	 * @return
 	 */
-	public static Constraint[] addElement(Constraint[] a, Constraint e) {
+	public static <T> T[] addElement(T[] a, T e) {
 	    a  = Arrays.copyOf(a, a.length + 1);
 	    a[a.length - 1] = e;
 	    return a;
 	}
 	
+	//////////// METHODES POUR PRINT ////////////
+	
 	private static void printSolution(String solution, int nbpieces){	
 		setBoard();
 		String[] sol = solution.split(", ");	
 		
-		//première pièce est dans "Solution: pièce(x)=a" donc faire un split avec "Solution:" 
+		//premiÃ¨re piÃ¨ce est dans "Solution: piÃ¨ce(x)=a" donc faire un split avec "Solution:" 
 		String firstPieceX = sol[0].split("Solution: ")[1];
 		String firstPieceY = sol[1];
 		board.get((Integer.parseInt(firstPieceY.split("=")[1]))-1)
@@ -47,7 +53,6 @@ public class CSPSolver {
 			board.get(Integer.parseInt(sol[i+1].split("=")[1])-1)
 				.set(Integer.parseInt(sol[i].split("=")[1])-1, (sol[i]).charAt(0));
 		}
-		
 		printBoard();
 	}
 
@@ -80,6 +85,39 @@ public class CSPSolver {
 		return true;
 	}
 	
+	////////////////////////////////////////////
+	//////////// METHODES POUR ARGS ////////////
+	
+	private static PieceDomaine[] parseDomains(String toParse){
+		PieceDomaine[] domains = null;
+		try {
+			domains = new PieceDomaine[]{};
+			
+			File file = new File(toParse);
+			FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				String[] data = line.split(" ");
+				int x = Integer.parseInt(data[0]);
+				int y = Integer.parseInt(data[1]);
+				int i = Integer.parseInt(data[2]);
+				int j = Integer.parseInt(data[3]);
+				int coeff = Integer.parseInt(data[4]);
+				String op = data[5];
+				
+				domains = addElement(domains, new PieceDomaine(x,y,i,j,coeff,op));
+			}
+			fileReader.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return domains;
+	}
+	
 	private static Boolean checkArgs(String[] args, int arg1, int arg2, String param){
 		if(args[arg1].equals(param)){
 			if (checkInt(args[arg2])){
@@ -100,7 +138,7 @@ public class CSPSolver {
 				return false;
 			}
 			
-			//check dimension de l'équiquier / nombre de tour, de fou et de cavalier
+			//check dimension de l'Ã©quiquier / nombre de tour, de fou et de cavalier
 			if(checkArgs(args, 1, 2, "-n") &&
 				checkArgs(args, 3, 4, "-t") &&
 				checkArgs(args, 5, 6, "-f") &&
@@ -117,8 +155,10 @@ public class CSPSolver {
 		return true;
 	}
 	
+	////////////////////////////////////////////
+	
 	/**
-	 * Résoudre le problème de l'indépendence.
+	 * RÃ©soudre le problÃ¨me de l'indÃ©pendence.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -131,7 +171,7 @@ public class CSPSolver {
 	}
 	
 	/**
-	 * Résoudre le problème de la dépendence / domination.
+	 * RÃ©soudre le problÃ¨me de la dÃ©pendence / domination.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -139,7 +179,7 @@ public class CSPSolver {
 	public static void checkDependency(Model model, Piece... pieces){
 		Constraint[] everyConstraint = new Constraint[]{};
 		
-		//d'abord checker qu'aucune pièce se trouve au même endroit
+		//d'abord checker qu'aucune piÃ¨ce se trouve au mÃªme endroit
 		for (int i = 0; i < pieces.length; ++i){
 			for (int j = 0; j < pieces.length; ++j){
 				pieces[i].checkEqual(pieces[j]);
@@ -147,11 +187,11 @@ public class CSPSolver {
 		}
 		
 		/* 
-		 * pour chaque case de l'échiquier, checker les 4 contraintes->
-		 * 1 .- chaque case [i,j] est occupÃ© par une piÃ¨ce OU
-		 * 2 .- la case [i,j] est dominÃ©e par une tour OU
-		 * 3 .- la case [i,j] est dominÃ©e par un fou OU
-		 * 4 .- la case [i,j] est dominÃ©e par un cavalier OU
+		 * pour chaque case de l'Ã©chiquier, checker les 4 contraintes->
+		 * 1 .- chaque case [i,j] est occupÃƒÂ© par une piÃƒÂ¨ce OU
+		 * 2 .- la case [i,j] est dominÃƒÂ©e par une tour OU
+		 * 3 .- la case [i,j] est dominÃƒÂ©e par un fou OU
+		 * 4 .- la case [i,j] est dominÃƒÂ©e par un cavalier OU
 		*/
 		
 		for(int i=1; i<=dimension; ++i){
@@ -189,15 +229,15 @@ public class CSPSolver {
 		}
 		*/
 		
-		// moi quand je mets en param : -d -n 4 -t 1 -f 2 -c 2, j'ai aucun problème
-		// deso prab je vais mettre moi meme les paramètres, trop de trucs bizarres :/
+		// moi quand je mets en param : -d -n 4 -t 1 -f 2 -c 2, j'ai aucun problÃ¨me
+		// deso prab je vais mettre moi meme les paramÃ¨tres, trop de trucs bizarres :/
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 		
 		nbTour = 0;
 		nbCavalier = 0;
 		nbFou = 0;
-		nbGenerique = 1;
+		nbGenerique = 2;
 		dimension = 2;
-		problem = "d";
+		problem = "i";
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
 		
 		nbPieces = nbTour+nbCavalier+nbFou+nbGenerique;
@@ -205,7 +245,7 @@ public class CSPSolver {
 		Model model = new Model();
 		Piece[] piece =  new Piece[nbPieces];
 		
-		// créer pièces
+		// crÃ©er piÃ¨ces
 		for(int i=0; i<nbTour; ++i){
 			piece[i] = new Tour(model, dimension);
 		}
@@ -217,8 +257,7 @@ public class CSPSolver {
 		}
 		
 		// creation de domaines test
-		PieceDomaine[] domaines = new PieceDomaine[1];
-		domaines[0] = new PieceDomaine(0,0,0,0,0,"=");
+		PieceDomaine[] domaines = parseDomains("test.txt");
 		
 		// creation de domaines test
 		
