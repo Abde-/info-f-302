@@ -5,9 +5,6 @@ import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
 
 /**
- * Pièce qui représente une pièce générique.
- * 
- * TODO: Cette classe s'occupe de representer une piece générique (cfr question bonus).
  * 
  * @author Abde-
  *
@@ -19,15 +16,15 @@ public abstract class Piece {
 	IntVar coordy;
 	
 	/**
-	 * @param model Modèle du problème à résoudre
+	 * @param model Mod�le du probl�me � r�soudre
 	 */
 	public Piece(Model model){
 		this.model = model;
 	}
 	
 	/**
-	 * Méthode qui met à jour le model `model` avec les contraintes de la piece en question
-	 * tel que ça respecte l'indépendence.
+	 * M�thode qui met � jour le model `model` avec les contraintes de la piece en question
+	 * tel que �a respecte l'ind�pendence.
 	 * 
 	 * @param piece piece avec laquelle checker l'indépendence
 	 */

@@ -16,6 +16,7 @@ public class CSPSolver {
 	private static int nbTour =0;
 	private static int nbFou=0;
 	private static int nbCavalier=0;
+	private static int nbGenerique=0;
 	private static int nbPieces;
 	private static ArrayList<ArrayList<Character>> board;
 	
@@ -36,7 +37,7 @@ public class CSPSolver {
 		setBoard();
 		String[] sol = solution.split(", ");	
 		
-		//premi√®re pi√®ce est dans "Solution: pi√®ce(x)=a" donc faire un split avec "Solution:" 
+		//premiËre piËce est dans "Solution: piËce(x)=a" donc faire un split avec "Solution:" 
 		String firstPieceX = sol[0].split("Solution: ")[1];
 		String firstPieceY = sol[1];
 		board.get((Integer.parseInt(firstPieceY.split("=")[1]))-1)
@@ -99,7 +100,7 @@ public class CSPSolver {
 				return false;
 			}
 			
-			//check dimension de l'√©quiquier / nombre de tour, de fou et de cavalier
+			//check dimension de l'Èquiquier / nombre de tour, de fou et de cavalier
 			if(checkArgs(args, 1, 2, "-n") &&
 				checkArgs(args, 3, 4, "-t") &&
 				checkArgs(args, 5, 6, "-f") &&
@@ -117,7 +118,7 @@ public class CSPSolver {
 	}
 	
 	/**
-	 * R√©soudre le probl√®me de l'ind√©pendence.
+	 * RÈsoudre le problËme de l'indÈpendence.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -130,15 +131,15 @@ public class CSPSolver {
 	}
 	
 	/**
-	 * R√©soudre le probl√®me de la d√©pendence / domination.
+	 * RÈsoudre le problËme de la dÈpendence / domination.
 	 * 
 	 * @param model
 	 * @param pieces
 	 */
-	public static void checkDependency(Model model, Piece...pieces){
+	public static void checkDependency(Model model, Piece... pieces){
 		Constraint[] everyConstraint = new Constraint[]{};
 		
-		//d'abord checker qu'aucune pi√®ce se trouve au m√™me endroit
+		//d'abord checker qu'aucune piËce se trouve au mÍme endroit
 		for (int i = 0; i < pieces.length; ++i){
 			for (int j = 0; j < pieces.length; ++j){
 				pieces[i].checkEqual(pieces[j]);
@@ -146,7 +147,7 @@ public class CSPSolver {
 		}
 		
 		/* 
-		 * pour chaque case de l'√©chiquier, checker les 4 contraintes->
+		 * pour chaque case de l'Èchiquier, checker les 4 contraintes->
 		 * 1 .- chaque case [i,j] est occup√© par une pi√®ce OU
 		 * 2 .- la case [i,j] est domin√©e par une tour OU
 		 * 3 .- la case [i,j] est domin√©e par un fou OU
@@ -182,27 +183,29 @@ public class CSPSolver {
 	
 	public static void main (String[] args){
 		
-		/*if(!setArgs(args)){
+		/* if(!setArgs(args)){
 			System.out.println("Pas de solutions");
 			return;
-		}*/
+		}
+		*/
 		
-		//moi quand je mets en param : -d -n 4 -t 1 -f 2 -c 2, j'ai aucun probl√®me
-		// deso prab je vais mettre moi meme les param√®tres, trop de trucs bizarres :/
+		// moi quand je mets en param : -d -n 4 -t 1 -f 2 -c 2, j'ai aucun problËme
+		// deso prab je vais mettre moi meme les paramËtres, trop de trucs bizarres :/
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 		
-		nbTour = 1;
-		nbCavalier = 2;
-		nbFou = 2;
-		dimension = 4;
+		nbTour = 0;
+		nbCavalier = 0;
+		nbFou = 0;
+		nbGenerique = 1;
+		dimension = 2;
 		problem = "d";
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
 		
-		nbPieces = nbTour+nbCavalier+nbFou;
+		nbPieces = nbTour+nbCavalier+nbFou+nbGenerique;
 		
 		Model model = new Model();
 		Piece[] piece =  new Piece[nbPieces];
 		
-		//cr√©er pi√®ces
+		// crÈer piËces
 		for(int i=0; i<nbTour; ++i){
 			piece[i] = new Tour(model, dimension);
 		}
@@ -213,6 +216,16 @@ public class CSPSolver {
 			piece[i] = new Fou(model, dimension);
 		}
 		
+		// creation de domaines test
+		PieceDomaine[] domaines = new PieceDomaine[1];
+		domaines[0] = new PieceDomaine(0,0,0,0,0,"=");
+		
+		// creation de domaines test
+		
+		for(int i=nbTour+nbCavalier+nbFou; i<nbTour+nbCavalier+nbFou+nbGenerique; ++i){
+			piece[i] = new PieceGenerique(model, domaines, dimension);
+		}
+	
 		if(problem.equals("i")){
 			checkIndependency(model,piece);
 		}
