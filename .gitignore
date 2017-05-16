@@ -6,3 +6,4 @@
 *.out
 
 *.gz
+/.DS_Store
