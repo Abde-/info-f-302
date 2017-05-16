@@ -36,8 +36,8 @@
 \subsection{Variables}
 \begin{equation}
   \begin{split}
-    X = \{ &t_{i} : i \epsilon  \{1, ..., k_{1} \}, f_{i} : i \epsilon  \{1, ..., k_{2} \}, h_{i} : i \epsilon  \{1, ..., k_{3} \}, \\
-    &t'_{i} : i \epsilon  \{1, ..., k_{1} \}, f'_{i} : i \epsilon  \{1, ..., k_{2} \}, h'_{i} : i \epsilon  \{1, ..., k_{3} \} \}
+    X = \{ &t_{i} : i \in  \{1, ..., k_{1} \}, f_{i} : i \in  \{1, ..., k_{2} \}, h_{i} : i \in  \{1, ..., k_{3} \}, \\
+    &t'_{i} : i \in  \{1, ..., k_{1} \}, f'_{i} : i \in  \{1, ..., k_{2} \}, h'_{i} : i \in  \{1, ..., k_{3} \} \}
   \end{split}
 \end{equation}
 
@@ -48,16 +48,16 @@ $$D = \{1, ..., n \}$$
 \subsubsection{Contraintes}
 \begin{itemize}
 \item Contrainte pour indiquer que 2 pièces ne peuvent pas se trouver dans la même case.
-   $$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \forall \hspace{0.1cm}  1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} ) $$
+   $$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm}  1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} ) $$
 \item Contrainte pour la portée des tours 
- $$ c_{2} = ( y, \{ (v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \leq k_{1}, \forall \hspace{0.1cm} 1\leq j \leq m, (v_{2i-1} \neq v_{2j-1}) \wedge  (v_{2i} \neq v_{2j}) \} ) $$
+ $$ c_{2} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \leq k_{1}, \forall \hspace{0.1cm} 1\leq j \leq m, (v_{2i-1} \neq v_{2j-1}) \wedge  (v_{2i} \neq v_{2j}) \} ) $$
 
 \item Contrainte pour la portée des fous 
-  $$c_{3} = ( y, \{ (v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \forall \hspace{0.1cm}  k_{1}+1\leq i \leq k_{1}+k_{2}, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \epsilon \{-n, n \}, $$
+  $$c_{3} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm}  k_{1}+1\leq i \leq k_{1}+k_{2}, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \in \{-n, n \}, $$
   $$[ ((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+k)) \wedge  ((v_{2i-1} \neq v_{2j-1}-k) \vee  (v_{2i} \neq v_{2j}+k)) ] \})$$
 
 \item Contrainte pour la portée des cavalier 
-  $$ c_{4} = ( y, \{ (v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \forall \hspace{0.1cm} k_{1}+k_{2}+1\leq i \leq k_{1}+k_{2}+k_{3}, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \epsilon \{-2, 2\}, \forall \hspace{0.1cm}l \epsilon \{-1, 1\}, $$
+  $$ c_{4} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} k_{1}+k_{2}+1\leq i \leq m, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \in \{-2, 2\}, \forall \hspace{0.1cm}l \in \{-1, 1\}, $$
   $$[((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+l)) \wedge ((v_{2i-1} \neq v_{2j-1}+l) \vee  (v_{2i} \neq v_{2j}+k)) ] \})$$
 
 \end{itemize}
@@ -68,25 +68,25 @@ $$D = \{1, ..., n \}$$
 \subsubsection{Contraintes}
 \begin{itemize}
 \item Contrainte pour indiquer que 2 pièces ne peuvent pas se trouver dans la même case.
-   $$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} )$$ 
+   $$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} )$$ 
 
  \item Contrainte pour que chaque case soit occupée par une pièce ou qu'elle soit menacée par au moins une pièce
     $$c_{2} = (y, \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n,  u1_{i,j} \cup u2_{i,j} \cup u3_{i,j} \cup u4_{i,j})$$
     
     avec : \begin{itemize}
-    \item[•] $u1_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, v_{2k-1} = i \wedge v_{2k} = j\}$ \\
+    \item[•] $u1_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., m\}, v_{2k-1} = i \wedge v_{2k} = j\}$ \\
     \textit{La case \{i, j\} est occupée par une pièce}\\
    
    
-    \item[•] $u2_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \forall \mid \exists k \epsilon \{1, ..., m\}, v_{2k-1} = i \vee v_{2k} = j\}$ \\
+    \item[•] $u2_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \forall \mid \exists k \in \{1, ..., m\}, v_{2k-1} = i \vee v_{2k} = j\}$ \\
     \textit{La case \{i, j\} est menacée par au moins une tour}\\
     
     
-    \item[•] $u3_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, p \epsilon\{-n, n \}, ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))) \}$ \\
+    \item[•] $u3_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., m\}, p \in\{-n, n \}, ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))) \}$ \\
     \textit{La case \{i, j\} est menacée par au moins un fou}\\
     
     
-    \item[•] $u4_{i,j} = \{(v_{1}, ..., v_{2m}) \epsilon  D^{2m} \mid \exists k \epsilon \{1, ..., m\}, p \epsilon \{-2, 2 \}, l \epsilon \{-1, 1\},
+    \item[•] $u4_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., m\}, p \in \{-2, 2 \}, l \in \{-1, 1\},
     ((v_{2k-1} = i+k \wedge v_{2k} = j+l)  \vee ((v_{2k-1} = i+l \wedge v_{2k} = j+k)))\}$ \\
     \textit{La case \{i, j\} est menacée par au moins un cavalier}\\
     
