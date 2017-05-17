@@ -131,6 +131,11 @@ La résolution du problème de domination se fait comme suit:
 \end{itemize}
 
 \subsubsection{Question bonus}
+Pour la question bonus, nous avons créé une classe PieceGenerique qui, comme les fous, tours et cavaliers, hérite de la classe parent Pièce.\\
+
+Nous demandons en arguments grâce au paramètre \textbf{"-g"} le nombre de pièce générique qu'un utilisateur demande. De plus nous avons défini le domaine d'une pièce avec des équations linéaires. Ces équations sont mises dans un fichier que l'utilisateur va mettre en paramètre grâce à \textbf{-file}. Les équations sont de la forme suivante : \textbf{a*x + b*y + c*i + d*j + e = 0}, l'opérateur peut bien sûr être autre qu'un \textbf{=} (>, >=, >, >=). \textbf{x} et \textbf{y} représentent les coordonnées d'une pièce, et \textbf{i} et \textbf{j} celles de la pièce à dominer. Dans le fichier donné par l'utilisateur, le format est : a b c d e op. \\
+
+Une fois que nous récupérons ces données, nous appliquons à la pieceGenerique le problème d'indépendance ou de domination. 
 
 \subsubsection{Question 4}
 
