@@ -78,15 +78,15 @@ $$D = \{1, ..., n \}$$
     \textit{La case \{i, j\} est occupée par une pièce}\\
    
    
-    \item[•] $u2_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \forall \mid \exists k \in \{1, ..., m\}, v_{2k-1} = i \vee v_{2k} = j\}$ \\
+    \item[•] $u2_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., k1\}, v_{2k-1} = i \vee v_{2k} = j\}$ \\
     \textit{La case \{i, j\} est menacée par au moins une tour}\\
     
     
-    \item[•] $u3_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., m\}, p \in\{-n, n \}, ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))) \}$ \\
+    \item[•] $u3_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{k1+1, ..., k1+k2\}, p \in\{-n, n \}, ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))) \}$ \\
     \textit{La case \{i, j\} est menacée par au moins un fou}\\
     
     
-    \item[•] $u4_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., m\}, p \in \{-2, 2 \}, l \in \{-1, 1\},
+    \item[•] $u4_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{k1+k2+1, ..., m\}, p \in \{-2, 2 \}, l \in \{-1, 1\},
     ((v_{2k-1} = i+k \wedge v_{2k} = j+l)  \vee ((v_{2k-1} = i+l \wedge v_{2k} = j+k)))\}$ \\
     \textit{La case \{i, j\} est menacée par au moins un cavalier}\\
     

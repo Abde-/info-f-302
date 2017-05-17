@@ -6,12 +6,16 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.constraints.Constraint;
 
 import infof302.pieces.*;
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
 
 public class CSPSolver {
 	
@@ -22,8 +26,9 @@ public class CSPSolver {
 	private static int nbCavalier=0;
 	private static int nbGenerique=0;
 	private static int nbPieces;
+	private static String genFile;
 	private static ArrayList<ArrayList<Character>> board;
-	
+
 	/**
 	 * Méthode pour rajouter élement e à l'array a.
 	 * 
@@ -69,17 +74,7 @@ public class CSPSolver {
 			System.out.println("");
 		}
 	}
-	
-	
-	private static Boolean checkInt(String number){
-		try{
-			Integer.parseInt(number);
-		}catch(NumberFormatException e){
-			return false;
-		}
-		return true;
-	}
-	
+
 	////////////////////////////////////////////
 	//////////// METHODES POUR ARGS ////////////
 	
@@ -112,45 +107,59 @@ public class CSPSolver {
 		
 		return domains;
 	}
-	
-	private static Boolean checkArgs(String[] args, int arg1, int arg2, String param){
-		if(args[arg1].equals(param)){
-			if (checkInt(args[arg2])){
-				return true;
-			}
-		}
-		return false;
-	}
 
-	private static Boolean setArgs(String[] args) {
-		if(args.length == 9){
-			//check le type du probleme
-			if(args[0].equals("-i")){
-				problem = "i";
-			}else if(args[0].equals("-d")){
-				problem = "d";
-			}else{
-				return false;
-			}
-			
-			//check dimension de l'équiquier / nombre de tour, de fou et de cavalier
-			if(checkArgs(args, 1, 2, "-n") &&
-				checkArgs(args, 3, 4, "-t") &&
-				checkArgs(args, 5, 6, "-f") &&
-				checkArgs(args, 7, 8, "-c")){
-				dimension = Integer.parseInt(args[2]);
-				nbTour = Integer.parseInt(args[4]);
-				nbFou = Integer.parseInt(args[6]);
-				nbCavalier = Integer.parseInt(args[8]);
-			}
-			else{
-				return false;
-			}
-		}
-		return true;
+	private static ArgumentParser argparse() {
+		ArgumentParser parser = ArgumentParsers.newArgumentParser("CSPSolver");
+        parser.addArgument("-i")
+        	  	.action(Arguments.storeTrue());
+        parser.addArgument("-d")
+        		.action(Arguments.storeTrue());
+        parser.addArgument("-n")
+        		.required(true)
+        		.type(Integer.class);
+        parser.addArgument("-t")
+				.required(true)
+				.type(Integer.class);
+        parser.addArgument("-f")
+				.required(true)
+				.type(Integer.class);
+        parser.addArgument("-c")
+				.required(true)
+				.type(Integer.class);
+        parser.addArgument("-g")
+				.type(Integer.class);
+        parser.addArgument("-file")
+			.type(String.class);
+        
+        return parser;
 	}
 	
-	////////////////////////////////////////////
+	public static Boolean initParam(ArgumentParser parser, String[] args){
+		Namespace ns = null;
+        try {
+            ns = parser.parseArgs(args);
+        } catch (ArgumentParserException e) {
+        	parser.handleError(e);
+        	return false;
+        }
+        
+        if(((boolean) ns.get("i") && (boolean) ns.get("d"))
+        		|| ((!(boolean) ns.get("i") && !(boolean) ns.get("d")))){
+        	return false;
+        }
+
+        problem = ((boolean) ns.get("i") ? "i" : "d");
+        dimension = (int) ns.get("n");
+        nbTour = (int) ns.get("t");
+        nbFou = (int) ns.get("f");
+        nbCavalier = (int) ns.get("c");
+        nbGenerique = (ns.get("g") != null ? (int) ns.get("g") : 0);
+        genFile = (ns.get("file") != null ? (String) ns.get("file") : "");
+        
+        return true;
+	}
+	
+	/////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Résoudre le problème de l'indépendence.
@@ -217,22 +226,21 @@ public class CSPSolver {
 	}
 	
 	public static void main (String[] args){
-		
-		/* if(!setArgs(args)){
+		//ARGPARSE
+		ArgumentParser parser = argparse();
+		 if(!initParam(parser, args)){
 			System.out.println("Pas de solutions");
 			return;
 		}
-		*/
 		
-		// moi quand je mets en param : -d -n 4 -t 1 -f 2 -c 2, j'ai aucun problème
-		// deso prab je vais mettre moi meme les paramètres, trop de trucs bizarres :/
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 		
-		nbTour = 0;
+		/*nbTour = 0;
 		nbCavalier = 0;
 		nbFou = 0;
 		nbGenerique = 2;
 		dimension = 2;
 		problem = "i";
+		genFile = "test.txt"*/
 		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
 		
 		nbPieces = nbTour+nbCavalier+nbFou+nbGenerique;
@@ -252,7 +260,7 @@ public class CSPSolver {
 		}
 		
 		// creation de domaines test
-		PieceDomaine[] domaines = parseDomains("test.txt");
+		PieceDomaine[] domaines = parseDomains(genFile);
 		
 		// creation de domaines test
 		
