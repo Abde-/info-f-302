@@ -46,17 +46,22 @@ $$D = \{1, ..., n \}$$
 
 \subsection{Question 1}
 \subsubsection{Contraintes}
+La question 1 est l'union de l’ensemble de contraintes:
+
+$$C = \{c_{1} \cup c_{2} \cup c_{3} \cup c_{4}\} $$
+tel que:
 \begin{itemize}
-\item Contrainte pour indiquer que 2 pièces ne peuvent pas se trouver dans la même case.
+\item $c_{1}$ est la contrainte pour indiquer que 2 pièces ne peuvent pas se trouver dans la même case.
    $$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm}  1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} ) $$
-\item Contrainte pour la portée des tours 
+   
+\item $c_{2}$ indique la contrainte pour la portée des tours 
  $$ c_{2} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \leq k_{1}, \forall \hspace{0.1cm} 1\leq j \leq m, (v_{2i-1} \neq v_{2j-1}) \wedge  (v_{2i} \neq v_{2j}) \} ) $$
 
-\item Contrainte pour la portée des fous 
+\item $c_{3}$ représente la contrainte pour la portée des fous 
   $$c_{3} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm}  k_{1}+1\leq i \leq k_{1}+k_{2}, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \in \{-n, n \}, $$
   $$[ ((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+k)) \wedge  ((v_{2i-1} \neq v_{2j-1}-k) \vee  (v_{2i} \neq v_{2j}+k)) ] \})$$
 
-\item Contrainte pour la portée des cavalier 
+\item $c_{4}$ est la contrainte pour la portée des cavaliers
   $$ c_{4} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} k_{1}+k_{2}+1\leq i \leq m, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \in \{-2, 2\}, \forall \hspace{0.1cm}l \in \{-1, 1\}, $$
   $$[((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+l)) \wedge ((v_{2i-1} \neq v_{2j-1}+l) \vee  (v_{2i} \neq v_{2j}+k)) ] \})$$
 
@@ -66,11 +71,16 @@ $$D = \{1, ..., n \}$$
 \subsection{Question 2}
 
 \subsubsection{Contraintes}
+Nous définissons l’ensemble de contraintes de la question 2 comme étant l'union:
+
+$$C = \{c_{1} \cup c_{2}\} $$
+
+tel que : 
 \begin{itemize}
-\item Contrainte pour indiquer que 2 pièces ne peuvent pas se trouver dans la même case.
+\item $c_{1}$ représente la contrainte pour indiquer que 2 pièces ne peuvent pas se trouver dans la même case.
    $$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} )$$ 
 
- \item Contrainte pour que chaque case soit occupée par une pièce ou qu'elle soit menacée par au moins une pièce
+ \item $c_{2}$ représente la contrainte pour que chaque case soit occupée par une pièce ou qu'elle soit menacée par au moins une pièce
     $$c_{2} = (y, \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n,  u1_{i,j} \cup u2_{i,j} \cup u3_{i,j} \cup u4_{i,j})$$
     
     avec : \begin{itemize}
