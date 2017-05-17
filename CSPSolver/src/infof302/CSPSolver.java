@@ -26,11 +26,11 @@ public class CSPSolver {
 	private static int nbCavalier=0;
 	private static int nbGenerique=0;
 	private static int nbPieces;
-	private static String genFile;
+	private static String genFile=null;
 	private static ArrayList<ArrayList<Character>> board;
 
 	/**
-	 * MÃ©thode pour rajouter Ã©lement e Ã  l'array a.
+	 * Méthode pour rajouter élement e à l'array a.
 	 * 
 	 * @param a
 	 * @param e
@@ -162,7 +162,7 @@ public class CSPSolver {
 	/////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * RÃ©soudre le problÃ¨me de l'indÃ©pendence.
+	 * Résoudre le problème de l'indépendence.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -175,7 +175,7 @@ public class CSPSolver {
 	}
 	
 	/**
-	 * RÃ©soudre le problÃ¨me de la dÃ©pendence / domination.
+	 * RÃ©soudre le problème de la dépendence / domination.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -183,7 +183,7 @@ public class CSPSolver {
 	public static void checkDependency(Model model, Piece... pieces){
 		Constraint[] everyConstraint = new Constraint[]{};
 		
-		//d'abord checker qu'aucune piÃ¨ce se trouve au mÃªme endroit
+		//d'abord checker qu'aucune pièce se trouve au même endroit
 		for (int i = 0; i < pieces.length; ++i){
 			for (int j = 0; j < pieces.length; ++j){
 				pieces[i].checkEqual(pieces[j]);
@@ -191,11 +191,11 @@ public class CSPSolver {
 		}
 		
 		/* 
-		 * pour chaque case de l'Ã©chiquier, checker les 4 contraintes->
-		 * 1 .- chaque case [i,j] est occupÃ©e par une piÃ¨ce OU
-		 * 2 .- la case [i,j] est dominÃ©e par une tour OU
-		 * 3 .- la case [i,j] est dominÃ©e par un fou OU
-		 * 4 .- la case [i,j] est dominÃ©e par un cavalier OU
+		 * pour chaque case de l'échiquier, checker les 4 contraintes->
+		 * 1 .- chaque case [i,j] est occupée par une piÃ¨ce OU
+		 * 2 .- la case [i,j] est dominée par une tour OU
+		 * 3 .- la case [i,j] est dominée par un fou OU
+		 * 4 .- la case [i,j] est dominée par un cavalier OU
 		*/
 		
 		for(int i=1; i<=dimension; ++i){
@@ -233,22 +233,12 @@ public class CSPSolver {
 			return;
 		}
 		
-		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 		
-		/*nbTour = 0;
-		nbCavalier = 0;
-		nbFou = 0;
-		nbGenerique = 2;
-		dimension = 2;
-		problem = "i";
-		genFile = "test.txt"*/
-		// TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST 
-		
 		nbPieces = nbTour+nbCavalier+nbFou+nbGenerique;
 		
 		Model model = new Model();
 		Piece[] piece =  new Piece[nbPieces];
 		
-		// crÃ©er piÃ¨ces
+		// créer pièces
 		for(int i=0; i<nbTour; ++i){
 			piece[i] = new Tour(model, dimension);
 		}
@@ -259,12 +249,15 @@ public class CSPSolver {
 			piece[i] = new Fou(model, dimension);
 		}
 		
-		PieceDomaine[] domaines = parseDomains(genFile);
+		PieceDomaine[] domaines = null;
+		if (nbGenerique != 0 && !genFile.equals("")){
+			domaines = parseDomains(genFile);
 		
-		for(int i=nbTour+nbCavalier+nbFou; i<nbTour+nbCavalier+nbFou+nbGenerique; ++i){
-			piece[i] = new PieceGenerique(model, domaines, dimension);
+			for(int i=nbTour+nbCavalier+nbFou; i<nbTour+nbCavalier+nbFou+nbGenerique; ++i){
+				piece[i] = new PieceGenerique(model, domaines, dimension);
+			}
 		}
-	
+		
 		if(problem.equals("i")){
 			checkIndependency(model,piece);
 		}
@@ -278,7 +271,7 @@ public class CSPSolver {
 			printSol(piece);
 		}
 		else{
-			System.out.println("Aucune solution trouvÃ©e");
+			System.out.println("Aucune solution trouvée");
 		}
 	
 	}
