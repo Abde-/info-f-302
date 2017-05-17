@@ -137,6 +137,8 @@ Nous demandons en arguments grâce au paramètre \textbf{"-g"} le nombre de piè
 
 Une fois que nous récupérons ces données, nous appliquons à la pieceGenerique le problème d'indépendance ou de domination. 
 
+Nous avons utilisé le model.scalar() afin de pouvoir implémenter les contraintes des équations linéaires. Le model.scalar() nous permet en effet d'y mettre en paramètres une liste les IntVar, une liste des différentes varaibles \textbf{x},\textbf{y}, \textbf{i} et \textbf{j}, ainsi que l'opérateur, et le coefficient. Afin de respecter le format du model.scalar(), nous passons le coefficient de l'autre côté de l'équation, et donc le mettons en négatif.
+	
 \subsubsection{Question 4}
 
 \section{Surveillance de musée}
