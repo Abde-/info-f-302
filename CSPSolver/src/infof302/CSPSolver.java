@@ -259,10 +259,7 @@ public class CSPSolver {
 			piece[i] = new Fou(model, dimension);
 		}
 		
-		// creation de domaines test
 		PieceDomaine[] domaines = parseDomains(genFile);
-		
-		// creation de domaines test
 		
 		for(int i=nbTour+nbCavalier+nbFou; i<nbTour+nbCavalier+nbFou+nbGenerique; ++i){
 			piece[i] = new PieceGenerique(model, domaines, dimension);

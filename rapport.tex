@@ -79,7 +79,30 @@ De même le troisième ensemble indique qu'il existe un fou dans les diagonales 
 Enfin le dernier ensemble exprime qu'il y a un cavalier aux déplacements L d'une case se trouvant aux indices \{i, j\}, $(\exists k \in \{k1+k2+1, ..., m\}, p \in \{-2, 2 \}, l \in \{-1, 1\}, ((v_{2k-1} = i+k \wedge v_{2k} = j+l)  \vee ((v_{2k-1} = i+l \wedge v_{2k} = j+k))))$. Avec le même raisonnement qu'avant, les indices k, des cavaliers, sont compris entre k1+k2+1 et m. De plus, pour faire les déplacements en L nous avons besoin de deux autres indices, appelés ici p et l.
 
 \subsection{ChocoSolver}
+
 \subsubsection{Question 3}
+Cette question nous demande d'implémenter un programme qui, étant donné une instance du problème de domination ou d'indépendance, en calcule une solution à l'aide de ChocoSolver.\\
+
+Un format d'entré et de sortie est fixé, où nous pouvons passer en paramètre les différentes options que nous voulons pour exécuter le programme. 
+Afin de parser les arguments, nous avons utilisé la librairie Argparse4j. Pour cela, un fichier jar est donné qu'il faut rajouter dans le buildpath du projet en maven. 
+
+Certains paramètres comme la dimension, le nombre de tour, cavalier, fous, sont obligatoire. En ce qui concerne le type de problème demandé, nous vérifions qu'il y a bien qu'un seul paramètre entré, soit un "-i" (indépendance) soit un "-d". \\
+
+%structure du code
+Pour le projet, nous avons décidé de créer une structure générique, où nous avons les classes tour, fous et cavalier héritant d'une classe Pièce. 
+Cette classe pièce contient les méthodes que nous voulons implémenter pour tous les types de pièces existantes, et nous permet de nous renvoyer les coordonnées x et y de celles-ci. De plus, dans cette classe nous avons créé une méthode qui, prenant en paramètre des coordonnées x et y, peut vérifier si une pièce y existe déjà. 
+
+Les trois autres classes comportent les mêmes méthodes. Dans checkIndependency, nous vérifions qu'aucune pièce ne se trouve aux déplacements que peux effectuer la pièce en question. Cette fonction parcourt toutes les pièces, vérifie d'abord qu'aucune autre n'est présentes aux coordonnées x et y, puis applique les différentes contraintes que nous avons exprimée dans le CSP plus haut. Par exemple, pour les tours se serait vérifier que la position x et y de la tour est différente de toutes les pièces.  
+
+La seconde méthode présente dans les 3 sous-classes, s'appelle inDomain, et prend en paramètre une case avec ses coordonnées. Elle nous renvoi, bien évidemment, le domaine tel que la case (X,Y) se trouve dans le domaine de la pièce en question. Par exemple pour les fous, on vérifie pour les diagonales de cette case la pièce fou s'y trouve.
+
+%expliquer la domination
+
+%model - piece - solveur
+Une fois que tous les arguments sont initialisés, nous créons un Model ainsi que toutes les pièces demandées par l'utilisateur. 
+
+%print
+
 
 \subsubsection{Question bonus}
 

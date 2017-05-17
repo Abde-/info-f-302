@@ -16,15 +16,15 @@ public abstract class Piece {
 	IntVar coordy;
 	
 	/**
-	 * @param model ModËle du problËme ‡ rÈsoudre
+	 * @param model Mod√®le du probl√®me √† r√©soudre
 	 */
 	public Piece(Model model){
 		this.model = model;
 	}
 	
 	/**
-	 * MÈthode qui met ‡ jour le model `model` avec les contraintes de la piece en question
-	 * tel que Áa respecte l'indÈpendence.
+	 * M√©thode qui met √† jour le model `model` avec les contraintes de la piece en question
+	 * tel que √ßa respecte l'ind√©pendence.
 	 * 
 	 * @param piece piece avec laquelle checker l'ind√©pendence
 	 */
