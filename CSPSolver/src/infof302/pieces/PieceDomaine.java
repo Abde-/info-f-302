@@ -7,7 +7,7 @@ import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
 
 /**
- * Classe qui va représenter le domaine qui prendra une piece.
+ * Classe qui va repÃ©senter le domaine qui prendra une piece.
  * 
  * @author Abde-
  *
@@ -47,7 +47,7 @@ public class PieceDomaine {
 	 * @param generique
 	 * 			la piece generique
 	 * @param piece
-	 * 			la piece à checker
+	 * 			la piece Ã  checker
 	 * @param model
 	 * 			modele dans lequel on applique la contrainte
 	 * @return
@@ -66,8 +66,8 @@ public class PieceDomaine {
 	
 	public Constraint inDomain(PieceGenerique generique, int casex, int casey, Model model){
 		
-		/* 1*x + 1*y + 2*i + 2*j = 0, ici i et j les coordonnées de la case (i,j).
-		 * alors on doit passer 2i et 2j de l'autre coté tq 1*x + 1*y = - 2*i - 2*j
+		/* 1*x + 1*y + 2*i + 2*j = 0, ici i et j les coordonnï¿½es de la case (i,j).
+		 * alors on doit passer 2i et 2j de l'autre cotï¿½ tq 1*x + 1*y = - 2*i - 2*j
 		 */
 		Constraint cons = 
 				model.scalar(
@@ -75,10 +75,6 @@ public class PieceDomaine {
 						new int[]{x,y},
 						op,
 						-coeff - i*casex - j*casey);
-		
-		System.out.println(casex);
-		System.out.println(casey);
-		System.out.println(-coeff - i*casex - j*casey);
 		
 		return cons;
 	}

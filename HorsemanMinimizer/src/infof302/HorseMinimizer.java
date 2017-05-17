@@ -109,7 +109,7 @@ public class HorseMinimizer {
 		// la somme de chevaliers
 		model.sum(cases_to_minimize, "=", minimize).post();
 		
-		// on minimuse le nombre maximum de chevaliers
+		// on minimise le nombre maximum de chevaliers
 		model.setObjective(Model.MINIMIZE, minimize);
 		
 		Solver solver = model.getSolver();

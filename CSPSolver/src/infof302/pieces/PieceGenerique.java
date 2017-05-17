@@ -7,7 +7,7 @@ import infof302.CSPSolver;
 
 /**
  * 
- * Méthode qui représente une piece générique (BONUS).
+ * Mï¿½thode qui reprï¿½sente une piece gï¿½nï¿½rique (BONUS).
  *
  */
 public class PieceGenerique extends Piece{
@@ -16,15 +16,9 @@ public class PieceGenerique extends Piece{
 	 * Les domaines que la piece peut dominer
 	 */
 	private PieceDomaine[] domaines;
-	/**
-	 * Taille de l'echiquier
-	 */
-	private int domain;
 	
 	public PieceGenerique(Model model, PieceDomaine[] domaines, int n) {
 		super(model);
-		
-		this.domain = n;
 		
 		coordx = model.intVar("Generique(x)", 1, n);
 		coordy = model.intVar("Generique(y)", 1, n);
@@ -39,7 +33,7 @@ public class PieceGenerique extends Piece{
 			
 			if(this != piece){
 				
-				// contrainte 1: checker que les 2 pieces se trouvent dans des positions différentes
+				// contrainte 1: checker que les 2 pieces se trouvent dans des positions diffï¿½rentes
 				checkEqual(piece);
 				Constraint[] contraintes = new Constraint[]{};
 			

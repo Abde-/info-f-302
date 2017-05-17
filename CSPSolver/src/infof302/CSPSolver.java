@@ -38,20 +38,15 @@ public class CSPSolver {
 	}
 	
 	//////////// METHODES POUR PRINT ////////////
-	
-	private static void printSolution(String solution, int nbpieces){	
+	private static void printSol(Piece[] piece) {
+		int coordX; int coordY;
+		char pieceName;
 		setBoard();
-		String[] sol = solution.split(", ");	
-		
-		//première pièce est dans "Solution: pièce(x)=a" donc faire un split avec "Solution:" 
-		String firstPieceX = sol[0].split("Solution: ")[1];
-		String firstPieceY = sol[1];
-		board.get((Integer.parseInt(firstPieceY.split("=")[1]))-1)
-			.set((Integer.parseInt(firstPieceX.split("=")[1])-1),firstPieceX.charAt(0));
-
-		for (int i=2; i<nbpieces+2; i+=2){
-			board.get(Integer.parseInt(sol[i+1].split("=")[1])-1)
-				.set(Integer.parseInt(sol[i].split("=")[1])-1, (sol[i]).charAt(0));
+		for(int i=0; i<piece.length; ++i){
+			coordX = piece[i].getCoordX().getValue() -1;
+			coordY = piece[i].getCoordY().getValue() -1;
+			pieceName = String.valueOf(piece[i].getCoordX()).charAt(0);
+			board.get(coordX).set(coordY,pieceName);
 		}
 		printBoard();
 	}
@@ -188,10 +183,10 @@ public class CSPSolver {
 		
 		/* 
 		 * pour chaque case de l'échiquier, checker les 4 contraintes->
-		 * 1 .- chaque case [i,j] est occupÃ© par une piÃ¨ce OU
-		 * 2 .- la case [i,j] est dominÃ©e par une tour OU
-		 * 3 .- la case [i,j] est dominÃ©e par un fou OU
-		 * 4 .- la case [i,j] est dominÃ©e par un cavalier OU
+		 * 1 .- chaque case [i,j] est occupée par une pièce OU
+		 * 2 .- la case [i,j] est dominée par une tour OU
+		 * 3 .- la case [i,j] est dominée par un fou OU
+		 * 4 .- la case [i,j] est dominée par un cavalier OU
 		*/
 		
 		for(int i=1; i<=dimension; ++i){
@@ -275,11 +270,12 @@ public class CSPSolver {
 		Solution solution = model.getSolver().findSolution();
 		if (solution != null){	
 			System.out.println(solution.toString());
-			printSolution(solution.toString(), nbPieces);
+			printSol(piece);
 		}
 		else{
 			System.out.println("Aucune solution trouvée");
 		}
 	
 	}
+	
 }
