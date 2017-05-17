@@ -30,7 +30,7 @@ public class CSPSolver {
 	private static ArrayList<ArrayList<Character>> board;
 
 	/**
-	 * MÈthode pour rajouter Èlement e ‡ l'array a.
+	 * M√©thode pour rajouter √©lement e √† l'array a.
 	 * 
 	 * @param a
 	 * @param e
@@ -162,7 +162,7 @@ public class CSPSolver {
 	/////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * RÈsoudre le problËme de l'indÈpendence.
+	 * R√©soudre le probl√®me de l'ind√©pendence.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -175,7 +175,7 @@ public class CSPSolver {
 	}
 	
 	/**
-	 * R√©soudre le problËme de la dÈpendence / domination.
+	 * R√©soudre le probl√®me de la d√©pendence / domination.
 	 * 
 	 * @param model
 	 * @param pieces
@@ -183,7 +183,7 @@ public class CSPSolver {
 	public static void checkDependency(Model model, Piece... pieces){
 		Constraint[] everyConstraint = new Constraint[]{};
 		
-		//d'abord checker qu'aucune piËce se trouve au mÍme endroit
+		//d'abord checker qu'aucune pi√®ce se trouve au m√™me endroit
 		for (int i = 0; i < pieces.length; ++i){
 			for (int j = 0; j < pieces.length; ++j){
 				pieces[i].checkEqual(pieces[j]);
@@ -191,11 +191,11 @@ public class CSPSolver {
 		}
 		
 		/* 
-		 * pour chaque case de l'Èchiquier, checker les 4 contraintes->
-		 * 1 .- chaque case [i,j] est occupÈe par une pi√®ce OU
-		 * 2 .- la case [i,j] est dominÈe par une tour OU
-		 * 3 .- la case [i,j] est dominÈe par un fou OU
-		 * 4 .- la case [i,j] est dominÈe par un cavalier OU
+		 * pour chaque case de l'√©chiquier, checker les 4 contraintes->
+		 * 1 .- chaque case [i,j] est occup√©e par une pi√®ce OU
+		 * 2 .- la case [i,j] est domin√©e par une tour OU
+		 * 3 .- la case [i,j] est domin√©e par un fou OU
+		 * 4 .- la case [i,j] est domin√©e par un cavalier OU
 		*/
 		
 		for(int i=1; i<=dimension; ++i){
@@ -238,7 +238,7 @@ public class CSPSolver {
 		Model model = new Model();
 		Piece[] piece =  new Piece[nbPieces];
 		
-		// crÈer piËces
+		// cr√©er pi√®ces
 		for(int i=0; i<nbTour; ++i){
 			piece[i] = new Tour(model, dimension);
 		}
@@ -271,7 +271,7 @@ public class CSPSolver {
 			printSol(piece);
 		}
 		else{
-			System.out.println("Aucune solution trouvÈe");
+			System.out.println("Aucune solution trouv√©e");
 		}
 	
 	}
