@@ -24,13 +24,13 @@ Ces pièces ont une différente manière de se déplacer. Les tours peuvent alle
 
 Nous pouvons compter deux problèmes dans les problèmes d'échecs, le problème d'indépendance ainsi que le problème de domination.
 \begin{itemize}
-\item Le problème d'indépendance consiste à déterminer s'il est possible d'assigner à chacune des pièce une position distincte sur l'échiquier de sorte qu'aucune pièce ne menace une autre pièce.
+\item Le problème d'indépendance consiste à déterminer s'il est possible d'assigner à chacune des pièces une position distincte sur l'échiquier de sorte qu'aucune pièce ne menace une autre pièce.
 \item Le problème de domination consiste à déterminer s'il est possible d'assigner à chacune des pièces une position distincte sur l'échiquier de sorte que chaque case soit occupée ou menacée par au moins une pièce. \\
 \end{itemize}
 
 Afin d'exprimer ces deux problèmes par un CSP équivalent, nous avons commencé par écrire les variables, le domaine ainsi que les notations utilisées dans les contraintes pour ceux-ci.
 
-La variable X est composée de toutes les coordonnées des pièces. Les tours sont notées $t_{i}$ et $t'_{i}$, les fous $f_{i}$ et $f'_{i}$ et finalement les cavaliers $h_{i}$ et $h'_{i}$.
+L'ensemble des variables est composée de toutes les coordonnées des pièces. Les tours sont notées $t_{i}$ et $t'_{i}$, les fous $f_{i}$ et $f'_{i}$ et finalement les cavaliers $h_{i}$ et $h'_{i}$.
 
 Le domaine est compris entre 1 et n, n indiquant la taille de l'échiquier.
 
@@ -39,24 +39,35 @@ De plus, m nous indique le nombre total de pièces que nous avons (k1 + k2 + k3)
 Enfin, y représente la suite de toutes les coordonnées des pièces, celles-ci sont alternées. Ainsi, les coordonnées x sont représentées sans les guillemets et les coordonnées y avec. Les 2 x k1 premières sont les tours, les 2 x k2 suivantes les fous et les 2 x k3 dernières les cavaliers.
 
 \subsubsection{Question 1}
-La première question nous demandait d'exprimer une instance quelconque du problème d'indépendance. Nous avons 4 contraintes pour ce problème.\\
+La première question nous demandait d'exprimer une instance quelconque du problème d'indépendance. L'ensemble des contraintes prend 4 contraintes pour ce problème.
+$$C = \{c_{1} \cup c_{2} \cup c_{3} \cup c_{4}\} $$
 
+$$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm}  1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} ) $$
 La première contrainte nous indique que deux pièces ne peuvent pas se trouver au même endroit sur l'échiquier. 
-Nous l'avons écrite comme ceci, pour un ensemble (v1, ..., v2m) $\in D^{2m}$, il existe un i et j, différent et compris entre 1 et m, le nombre de pièce, tel que ces deux pièces ne peuvent pas avoir les mêmes coordonnées $(v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j})$. 
+Nous l'avons implémentée comme ceci, pour un ensemble (v1, ..., v2m) $\in D^{2m}$, il existe un i et j, différent et compris entre 1 et m, le nombre de pièce, tel que ces deux pièces ne peuvent pas avoir les mêmes coordonnées. 
 
-L'ensemble est jusque v2m car dans y nous avons le nombre de pièce multipliées par 2, pour avoir toutes les coordonnées. De la même manière, nous multiplions les indices i et j par deux, car nous les avons bornés jusque m, mais nous avons besoin de la seconde valeur dans y. Pour rappel, dans y, par exemple pour la première tour, nous avions mis $t_{1}$, suivit de $t'{1}$.\\
+L'ensemble est jusque v2m car dans y nous avons le nombre de pièce multipliées par 2, pour avoir toutes les coordonnées. De la même manière, nous multiplions les indices i et j par deux, car nous les avons bornés jusque m, et pour avoir la coordonnée y nous avons besoin de la valeur jsute à cotée qui se trouve dans y. Pour rappel, dans y, par exemple pour la première tour, nous avions mis $t_{1}$, suivit de $t'{1}$, pour représenter ses coordonées.\\
 
 Pour les trois autres contraintes de ce problème, l'ensemble reste le même c'est seulement les conditions sur les deux pièces qui changent. \\
 
-La seconde contrainte se porte sur les tours, elle indique qu'aucune pièce ne peut se trouver sur l'horizontal ou la verticale d'une tour, $(v_{2i-1} \neq v_{2j-1}) \wedge  (v_{2i} \neq v_{2j})$. Pour ceci, les bornes de i sont entre 1 et k1, afin de ne prendre en compte que les tours, et j se trouve entre 1 et m.  Ces deux pièces ne peuvent être à la même colonne et à la même ligne. \\
+$$ c_{2} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \leq k_{1}, \forall \hspace{0.1cm} 1\leq j \leq m,$$
+$$ (v_{2i-1} \neq v_{2j-1}) \wedge  (v_{2i} \neq v_{2j}) \} ) $$
+La seconde contrainte se porte sur les tours, elle indique qu'aucune pièce ne peut se trouver sur l'horizontal ou la verticale d'une tour. Pour ceci, les bornes de i sont entre 1 et k1, afin de ne prendre en compte que les tours, et j se trouve entre 1 et m.  Ces deux pièces ne peuvent être à la même colonne et à la même ligne. 
 
-La troisième contrainte est sur la portée des fous, aucune pièce ne peut être sur les diagonales d'un fou, $((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+k)) \wedge  ((v_{2i-1} \neq v_{2j-1}-k) \vee  (v_{2i} \neq v_{2j}+k))$. Pour cette contrainte, le i est entre k1+1 et k1+k2, afin de n'avoir que les fous, étant donné que les k1 représentent les tours nous faisons un saut du nombre de tour présentes. Les bornes de j, par contre, restent les mêmes, de 1 à m. Dans cette contraintes, nous devons tenir en compte un autre indice qui définira les déplacements vers les diagonales, nous l'avons appelé k et celui-ci est compris entre \{-n, n\}.  Nous vérifions donc dans les 4 sens s'il n'y a pas d'autre pièces présentes.\\
+  $$c_{3} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm}  k_{1}+1\leq i \leq k_{1}+k_{2}, \forall \hspace{0.1cm} 1\leq j \leq m, \forall \hspace{0.1cm} k \in \{-n, n \}, $$
+  $$[ ((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+k)) \wedge  ((v_{2i-1} \neq v_{2j-1}-k) \vee  (v_{2i} \neq v_{2j}+k)) ] \})$$
+La troisième contrainte est sur la portée des fous, aucune pièce ne peut être sur les diagonales d'un fou. Pour cette contrainte, le i est entre k1+1 et k1+k2, afin de n'avoir que les fous, étant donné que les k1 représentent les tours nous faisons un saut du nombre de tour présentes. Les bornes de j, par contre, restent les mêmes, de 1 à m. Dans cette contraintes, nous devons tenir en compte un autre indice qui définira les déplacements vers les diagonales, nous l'avons appelé k et celui-ci est compris entre \{-n, n\}.  Nous vérifions donc dans les 4 sens s'il n'y a pas d'autre pièces présentes.
 
-Enfin, pour la dernière contrainte sur les cavaliers, nous devons vérifier qu'aucune pièce ne se trouve sur les déplacements en L, $((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+l)) \wedge ((v_{2i-1} \neq v_{2j-1}+l) \vee  (v_{2i} \neq v_{2j}+k))$. Pour cela, la borne inférieure de i est maintenant k1+k2+1, nous sautons donc toutes les tours et les fous. Et donc la borne supérieure est bien le nombre total de pièce m. 
-En plus de ceci, nous avons un k compris entre \{-2, 2\} et un l entre \{-1, 1\}, afin de pouvoir indiquer le déplacement vers une direction de deux case suivit d'un mouvement perpendiculaire. 
+ $$ c_{4} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} k_{1}+k_{2}+1\leq i \leq m, \forall \hspace{0.1cm} 1\leq j \leq m,$$ $$\forall \hspace{0.1cm} k \in \{-2, 2\}, \forall \hspace{0.1cm}l \in \{-1, 1\},$$
+  $$[((v_{2i-1} \neq v_{2j-1}+k) \vee  (v_{2i} \neq v_{2j}+l)) \wedge ((v_{2i-1} \neq v_{2j-1}+l) \vee  (v_{2i} \neq v_{2j}+k)) ] \})$$
+Enfin, pour la dernière contrainte sur les cavaliers, nous devons vérifier qu'aucune pièce ne se trouve sur les déplacements en L. Pour cela, la borne inférieure de i est maintenant k1+k2+1, nous sautons donc toutes les tours et tous les fous. Et donc la borne supérieure est bien le nombre total de pièce: m. En plus de ceci, nous avons un k compris entre \{-2, 2\} et un l entre \{-1, 1\}, afin de pouvoir indiquer le déplacement vers une direction de deux cases suivit d'un mouvement perpendiculaire. 
 
 \subsubsection{Question 2}
-Une instance quelconque du problème domination devait être exprimée pour la seconde question. Nous avons 2 contraintes pour celle-ci, où la première reste la même que pour la première question, 2 pièces ne peuvent pas être sur la même coordonnée dans l'échiquier.\\
+Une instance quelconque du problème domination devait être exprimée pour la seconde question. L'ensemble des contraintes est composée de 2 contraintes.
+$$C = \{c_{1} \cup c_{2}\} $$
+
+Où la première reste la même que pour la première question, 2 pièces ne peuvent pas être sur la même coordonnée dans l'échiquier.\\
+$$c_{1} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \neq j \leq m, (v_{2i-1} \neq v_{2j-1}) \vee  (v_{2i} \neq v_{2j}) \} )$$ 
 
 La deuxième contrainte indique qu'une pièce est soit :
 \begin{itemize}
@@ -66,17 +77,24 @@ La deuxième contrainte indique qu'une pièce est soit :
 \item Menacée par un cavalier
 \end{itemize}
 
-Les indices i et j sont bornés entre 1 et n, nous les passons en paramètre aux 4 ensembles exprimant les conditions citées ci-dessus. \\
+$$c_{2} = (y, \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n,  u1_{i,j} \cup u2_{i,j} \cup u3_{i,j} \cup u4_{i,j})$$
+    
+Les indices i et j sont bornés entre 1 et n, nous les passons en paramètre aux 4 ensembles exprimant les conditions citées ci-dessus. 
+\newpage
+$$u1_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., m\}, v_{2k-1} = i \wedge v_{2k} = j\}$$
+Le premier ensemble signifie que pour une case dont les coordonnées sont \{i, j\}, il existe une pièce quelconque ayant les même coordonnées.
+L'indice k, appartenant à \{1, m\}, représente donc une pièce.
 
-Le premier ensemble signifie que pour une case dont les coordonnées sont \{i, j\}, il existe une pièce quelconque ayant les même coordonnées,
-$(\exists k \in \{1, ..., m\}, v_{2k-1} = i \wedge v_{2k} = j)$. 
-L'indice k, appartenant à \{1, m\}, représente donc une pièce.\\
+$$u2_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{1, ..., k1\}, v_{2k-1} = i \vee v_{2k} = j\}$$
+Dans le second ensemble, nous voulons qu'une tour aie la même ligne ou la même colonne que la case \{i, j\}. L'indice k symbolise les tours que nous avons, ses bornes étant entre 1 et k1.
 
-Dans le second ensemble, nous voulons qu'une tour aie la même ligne ou la même colonne que la case \{i, j\}, $(\exists k \in \{1, ..., k1\}, v_{2k-1} = i \vee v_{2k} = j)$. L'indice k symbolise les tours que nous avons, ses bornes étant entre 1 et k1.\\
+$$u3_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{k1+1, ..., k1+k2\}, p \in\{-n, n \},$$
+$$ ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))) \}$$
+De même le troisième ensemble indique qu'il existe un fou dans les diagonales d'une case \{i, j\}. Ici, vu que nous considérons les fous, les bornes de k sont comprises entre k1+1 à k1+k2. Et comme pour la première question, nous devons intégrer un autre indice, que nous avons appelé ici p, afin de se déplacer dans les diagonales d'une case. 
 
-De même le troisième ensemble indique qu'il existe un fou dans les diagonales d'une case \{i, j\}, $(\exists k \in \{k1+1, ..., k1+k2\}, p \in\{-n, n \}, ((v_{2k-1} = i+p \wedge v_{2k} = j+p) \vee ((v_{2k-1} = i-p \wedge v_{2k} = j+p))))$. Ici, vu que nous considérons les fous, les bornes de k sont comprises entre k1+1 à k1+k2. Et comme pour la première question, nous devons intégrer un autre indice, que nous avons appelé ici p, afin de se déplacer dans les diagonales d'une case. \\
-
-Enfin le dernier ensemble exprime qu'il y a un cavalier aux déplacements L d'une case se trouvant aux indices \{i, j\}, $(\exists k \in \{k1+k2+1, ..., m\}, p \in \{-2, 2 \}, l \in \{-1, 1\}, ((v_{2k-1} = i+k \wedge v_{2k} = j+l)  \vee ((v_{2k-1} = i+l \wedge v_{2k} = j+k))))$. Avec le même raisonnement qu'avant, les indices k, des cavaliers, sont compris entre k1+k2+1 et m. De plus, pour faire les déplacements en L nous avons besoin de deux autres indices, appelés ici p et l.
+$$u4_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{k1+k2+1, ..., m\}, p \in \{-2, 2 \}, l \in \{-1, 1\},$$
+ $$((v_{2k-1} = i+k \wedge v_{2k} = j+l)  \vee ((v_{2k-1} = i+l \wedge v_{2k} = j+k)))\}$$
+Enfin le dernier ensemble exprime qu'il y a un cavalier aux déplacements L d'une case se trouvant aux indices \{i, j\}. Avec le même raisonnement qu'avant, les indices k, des cavaliers, sont compris entre k1+k2+1 et m. De plus, pour faire les déplacements en L nous avons besoin de deux autres indices, appelés ici p et l.
 
 \subsection{ChocoSolver}
 
