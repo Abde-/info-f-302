@@ -267,7 +267,6 @@ public class CSPSolver {
 		
 		Solution solution = model.getSolver().findSolution();
 		if (solution != null){	
-			System.out.println(solution.toString());
 			printSol(piece);
 		}
 		else{

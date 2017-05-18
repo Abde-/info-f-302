@@ -27,7 +27,7 @@
 \subsection{Notations}
 \begin{itemize}
 \item n x n = dimension de l'échiquier
-\item $a_{i,j}$ = case (i,j) du terrain (elle est égale à 1 s'il c'est un mur 0 sinon)
+\item $a_{i,j}$ = case (i,j) du terrain (elle est égale à 1 si c'est un mur 0 sinon)
 \item y = $x_{1,1},\ldots, x_{1,n},x_{2,1}, \ldots,x_{2,n}, \ldots, x_{n,n} $
 \item y' = $x'_{1,1},\ldots, x'_{1,n},x'_{2,1}, \ldots,x'_{2,n}, \ldots, x'_{n,n} $
 \item z = $v_{1,1},\ldots, v_{1,n},v_{2,1}, \ldots,v_{2,n}, \ldots, v_{n,n} $
@@ -59,7 +59,7 @@ La question 1 est l'union de l’ensemble de contraintes:
 $$C = \{c_{1} \cup c_{2} \cup c_{3} \cup c_{4}\} $$
 tel que:
 \begin{itemize}
-\item $c_{1}$ est la contrainte pour indiquer que $x'_{i,j} = 1$ ssi la caméra se trouve aux memes coordonnées.
+\item $c_{1}$ est la contrainte pour indiquer que $x'_{i,j} = 1$ ssi la caméra se trouve aux mêmes coordonnées.
   $$c_{1} = ( yy', \{ vv' \in  D_1^{n^2} \times D_2^{n^2} \mid \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n,
   ((v_{i,j} = \emptyset \hspace{0.1cm} \wedge \hspace{0.1cm} v'_{i,j} = 0)
    \hspace{0.1cm} \vee \hspace{0.1cm}

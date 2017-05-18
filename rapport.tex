@@ -5,6 +5,12 @@
 \usepackage{hyperref}
 \usepackage[french]{babel}
 \usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{graphicx} % to include pictures
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{breqn}
+\usepackage{amsfonts}
 
 \title{INFO-F-302 Informatique Fondamentale\\ Projet : Problèmes de Satisfactions de Contraintes et Utilisation de l’Outil ChocoSolver}
 \author{El Haman Abdeselam Abdeselam \and Minhas Prabhdeep}
@@ -146,7 +152,7 @@ $$ c_{dom} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm
 $$ (\exists k, \phi_{v_{2k-1},v_{2k}} (i,j) \hspace{0.1cm} \vee \hspace{0.1cm} (v_{2k-1} = i \wedge v_{2k} = j) \} ) $$
 
 
-Nous demandons en arguments grâce au paramètre \textbf{"-g"} le nombre de pièce générique qu'un utilisateur demande. De plus nous avons défini le domaine d'une pièce avec des équations linéaires. Ces équations sont mises dans un fichier que l'utilisateur va mettre en paramètre grâce à \textbf{-file}. Les équations sont de la forme suivante : \textbf{a*x + b*y + c*i + d*j + e = 0}, l'opérateur peut bien sûr être autre qu'un \textbf{=} (>, >=, <, <=, !=). \textbf{x} et \textbf{y} représentent les coordonnées d'une pièce, et \textbf{i} et \textbf{j} celles de la pièce à dominer. Dans le fichier donné par l'utilisateur, le format est : a b c d e op. \\
+Nous demandons en arguments grâce au paramètre \textbf{"-g"} le nombre de pièce générique qu'un utilisateur demande. De plus nous avons défini le domaine d'une pièce avec des équations linéaires. Ces équations sont mises dans un fichier que l'utilisateur va mettre en paramètre grâce à \textbf{-file}. Les équations sont de la forme suivante : \textbf{a*x + b*y + c*i + d*j + e = 0}, l'opérateur peut bien sûr être autre qu'un \textbf{=} (>, >=, <, <=, !=). \textbf{x} et \textbf{y} représentent les coordonnées d'une pièce, et \textbf{i} et \textbf{j} celles de la pièce à dominer. Dans le fichier donné par l'utilisateur, le format est : a b c d e op., et nous supposons qu'il n'y a aucune erreur dans celui-ci. \\
 
 Une fois que nous récupérons ces données, nous appliquons à la pieceGenerique le problème d'indépendance ou de domination. 
 
@@ -172,17 +178,96 @@ L'ensemble des contraintes est défini comme ceci :
 \section{Surveillance de musée}
 Le code pour la dernière question, sur la surveillance de musée, se trouve dans \textbf{MuseumMonitorer}. Le CSP de cette question, quand à lui, est dans le fichier \textbf{musee.pdf}.\\
 
-\subsection{CPS}
+\subsection{CSP}
+Pour les notations de ce problème, nous retrouvons : 
+\begin{itemize}
+\item n x n la dimension de l'échiquier
+\item $a_{i,j}$ = case (i,j) du terrain (elle est égale à 1 si c'est un mur 0 sinon)
+\item y variable représentant l'orientation des caméras
+\item y' variables indiquant si une caméra est présente
+\item z contient les valeurs de y
+\item z' représentant les valeurs de y'
+\item yy' = concaténation de y et y'
+\item zz' = concaténation de z et z'\\
+\end{itemize}
+
+L'ensemble des variables est constitué de :
+\begin{itemize}
+\item Variables indiquant la direction de la caméra qui se trouve dans cette case
+\item Variables par case indiquant que la case est occupée par une caméra\\
+\end{itemize}
+
+Le problème possède deux domaines, le premier comprenant toutes les directions qu'une caméra peut prendre, $D_1 = \{Nord, Sud, Est, Ouest, \emptyset\}$. 
+
+Et le deuxième étant $D_2 = \{0,1\}$.
+
+L'ensemble des contraintes est défini par l'union de 3 contraintes.
+  $$c_{1} = ( yy', \{ vv' \in  D_1^{n^2} \times D_2^{n^2} \mid \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n,$$
+  $$((v_{i,j} = \emptyset \hspace{0.1cm} \wedge \hspace{0.1cm} v'_{i,j} = 0)
+   \hspace{0.1cm} \vee \hspace{0.1cm}
+  (v_{i,j}  \neq \emptyset \hspace{0.1cm}\wedge \hspace{0.1cm} v_{i,j} = 1)) \} ) $$
+Cette première contrainte, nous dit que $x'_{i,j} = 1$ ssi la caméra se trouve aux mêmes coordonnées. Nous avons les indices de \textbf{i} et \textbf{j} allant de 1 à \textbf{n}, la taille de l'échiquier, afin de prendre en considération toutes les cases de celui-ci. 
+
+  $$c_{2} = ( y', \{ v' \in D_2^{n^2} \mid \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n, (a_{i,j} = 1 \wedge v'_{i,j} = 0 ) \vee (a_{i,j} = 0))$$  
+
+La seconde contrainte permet de vérifier qu'une caméra ne se trouve pas dans un mur, ses coordonnées doivent être différentes d'un mu existant.
+
+\begin{multline}
+    c_{3} = ( yy',\hspace{0.1cm} \{ vv' |\hspace{0.1cm} \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n, \hspace{0.1cm} (a_{i,j}=1) \vee (v'_{i,j} = 1) \vee \\ \Bigg(a_{i,j} = 0\hspace{0.1cm} \bigwedge \hspace{0.1cm} \bigg(
+    (\exists k \in \mathbb{Z} , (v_ {i+k,j} = Ouest \wedge (\forall 1 \leq l < k, v'_{i+l,j}=0
+    \wedge a_{i+l,j}=0))) \\
+    \bigvee \\
+    (\exists k \in \mathbb{Z} , (v_ {i-k,j} = Est \wedge (\forall 1 \leq l < k, v'_{i-l,j}=0
+    \wedge a_{i-l,j}=0))) \\
+    \bigvee \\
+    (\exists k \in \mathbb{Z} , (v_ {i,j+k} = Sud \wedge (\forall 1 \leq l < k, v'_{i,j+l}=0
+    \wedge a_{i,j+l}=0))) \\
+    \bigvee \\
+    (\exists k \in \mathbb{Z} , (v_ {i,j-k} = Nord \wedge (\forall 1 \leq l < k, v'_{i,j-l}=0
+    \wedge a_{i,j-l}=0))\bigg)
+    \Bigg)\}
+    )
+  \end{multline}
+  
+  Enfin, la troisième et dernière contrainte exprime que chaque case doit être occupée par une caméra, ou être dominée par une caméra par le nord, le sud, l'est ou l'ouest.
+  
+  Le $(a_{i,j}) $ exprime la présence d'une caméra. Et comme on le voit, on vérifie pour chaque case dans ces 4 directions s'il y a une domination par une caméra.
 
 \subsection{ChocoSolver}
 L'utilisateur doit entrer en paramètre le nom du fichier dans lequel se trouve un tableau rectangulaire représentant la topologie de la salle à surveiller. 
 Une case est soit vide, soit occupée par un obstacle. Un obstacle est symbolisé par \textbf{*}. De plus, les 4 murs sont toujours des obstacles. 
 La sortie du code donne le nombre minimal de capteurs nécessaires, ainsi qu'un tableau montrant la position des caméras. \\
 
-Dans l'implémentation du problème, nous commençons par parser le fichier mis en paramètre par l'utilisateur. Nous enregistrons dans une variable \textbf{murs}, contenant des booleans, le tableau. Nous travaillons avec des booleans, et donc s'il y a un obstacle a une position \{x, y\}, nous mettons le boolean à true, false sinon.\\
+Dans l'implémentation du problème, nous commençons par parser le fichier mis en paramètre par l'utilisateur. Nous enregistrons dans une variable \textbf{murs}, contenant des booleans, le tableau. Nous travaillons avec des booleans, et donc s'il y a un obstacle a une position \{x, y\}, nous mettons le boolean à true, false sinon.Nous considérons qu'il n'y a pas d'erreurs dans le fichier mis e paramètre par l'utilisateur.\\
 
 Nous devons donc minimiser le nombre de caméra présentes dans la pièce d'attente. Pour cela, nous devons respecter plusieurs contraintes. Premièrement, nous devons faire appliquer au model qu'une caméra existe seulement si son orientation n'est pas nulle, elle doit aller vers le nord, le sud, l'est ou l'ouest. Ensuite, il ne peut y avoir de caméra dans les murs, elles doivent être dans un espace vide. Finalement, chaque case doit être dominée ou occupée par une caméra. Afin de respecter cette dernière contrainte, pour chaque case nous vérifions pour ces 4 directions si une caméra y pointe.
 
 Tout comme pour la question 4, nous itérerons toutes les solutions possibles jusqu'à avoir la meilleure.
 
+\section{Résultats}
+Nous avons créer des fichiers .jar afin de pouvoir exécuter les différentes implémentations.
+
+\subsection{Exemples}
+Voici quelques exemples:
+\begin{itemize}
+\item Problème d'indépendance avec un échiquier de dimension 5 x 5 , 3 tours, 2 fous ainsi que 2 cavaliers
+ 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./CSPindep.png}
+ 	\end{center}
+\item Problème de domination avec un échiquier de dimension 4 x 4 , 2 tours, 1 fous ainsi que 2 cavaliers
+ 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./CSPdep.png}
+ 	\end{center}
+\item Une implémentation de la question bonus avec un échiquier de dimension 5 x 5 , 2 tours, 1 fous, 2 cavaliers et 2 pièces génriques. Les équations linéaires de ces pièces génériques se trouvent dans le fichier pieceGen.txt.
+ 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./CSPgen.png}
+ 	\end{center}
+\item Pour la question4, minimisation des cavaliers, nous devons entrer en paramètre la taille de l'échiquier.
+ 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./Horsemin.png}
+ 	\end{center}
+\end{itemize}
+
+
+\subsection{Analyse}
 \end{document}
