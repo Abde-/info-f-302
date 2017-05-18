@@ -271,7 +271,8 @@ public class CSPSolver {
 			printSol(piece);
 		}
 		else{
-			System.out.println("Aucune solution trouv�e");
+
+			System.out.println("Aucune solution trouvée");
 		}
 	
 	}

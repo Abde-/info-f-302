@@ -66,8 +66,8 @@ public class PieceDomaine {
 	
 	public Constraint inDomain(PieceGenerique generique, int casex, int casey, Model model){
 		
-		/* 1*x + 1*y + 2*i + 2*j = 0, ici i et j les coordonn�es de la case (i,j).
-		 * alors on doit passer 2i et 2j de l'autre cot� tq 1*x + 1*y = - 2*i - 2*j
+		/* 1*x + 1*y + 2*i + 2*j = 0, ici i et j les coordonnées de la case (i,j).
+		 * alors on doit passer 2i et 2j de l'autre coté tq 1*x + 1*y = - 2*i - 2*j
 		 */
 		Constraint cons = 
 				model.scalar(
