@@ -16,7 +16,7 @@
 
 \section{Problèmes d'échecs}
 
-\subsection{CPS}
+\subsection{CSP}
 Les CSP pour les question 1 et 2 se trouvent dans \textbf{quest1-2.pdf}.\\
 
 Soient n, k1, k2 et k3 des entiers positifs.
@@ -135,7 +135,18 @@ La résolution du problème de domination se fait comme suit:
 \subsubsection{Question bonus}
 Pour la question bonus, nous avons créé une classe PieceGenerique qui, comme les fous, tours et cavaliers, hérite de la classe parent Pièce.\\
 
-Nous demandons en arguments grâce au paramètre \textbf{"-g"} le nombre de pièce générique qu'un utilisateur demande. De plus nous avons défini le domaine d'une pièce avec des équations linéaires. Ces équations sont mises dans un fichier que l'utilisateur va mettre en paramètre grâce à \textbf{-file}. Les équations sont de la forme suivante : \textbf{a*x + b*y + c*i + d*j + e = 0}, l'opérateur peut bien sûr être autre qu'un \textbf{=} (>, >=, >, >=). \textbf{x} et \textbf{y} représentent les coordonnées d'une pièce, et \textbf{i} et \textbf{j} celles de la pièce à dominer. Dans le fichier donné par l'utilisateur, le format est : a b c d e op. \\
+Nous représentons le domaine d'une pièce quelconque étant la fonction booléenne $\phi_{x,y} (i,j)$ qui
+renvoit vrai ou faux si la case/pièce (i,j) est dominée par la case (x,y). C'est avec cette fonction
+qu'on peut créer les contraintes de domination et indépendence pour une pièce quelconque tel que: \\
+
+$$ c_{ind} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} k_{1} + k_{2} + k_{3} \leq i \leq m, \forall \hspace{0.1cm} k_{1} + k_{2} + k_{3} \leq j \leq m,$$
+$$ \neg \phi_ {v_{2i-1},v_{2i}} (v_{2j-1},v_{2j}) \} ) $$
+
+$$ c_{dom} = ( y, \{ (v_{1}, ..., v_{2m}) \in  D^{2m} \mid \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n,$$
+$$ (\exists k, \phi_{v_{2k-1},v_{2k}} (i,j) \hspace{0.1cm} \vee \hspace{0.1cm} (v_{2k-1} = i \wedge v_{2k} = j) \} ) $$
+
+
+Nous demandons en arguments grâce au paramètre \textbf{"-g"} le nombre de pièce générique qu'un utilisateur demande. De plus nous avons défini le domaine d'une pièce avec des équations linéaires. Ces équations sont mises dans un fichier que l'utilisateur va mettre en paramètre grâce à \textbf{-file}. Les équations sont de la forme suivante : \textbf{a*x + b*y + c*i + d*j + e = 0}, l'opérateur peut bien sûr être autre qu'un \textbf{=} (>, >=, <, <=, !=). \textbf{x} et \textbf{y} représentent les coordonnées d'une pièce, et \textbf{i} et \textbf{j} celles de la pièce à dominer. Dans le fichier donné par l'utilisateur, le format est : a b c d e op. \\
 
 Une fois que nous récupérons ces données, nous appliquons à la pieceGenerique le problème d'indépendance ou de domination. 
 
