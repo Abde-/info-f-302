@@ -51,11 +51,11 @@ public class MuseumMonitorer {
 	 */
 	public static void main(String[] filename) throws NumberFormatException, IOException {
 		//check file exists
-		if(filename.length < 2){
-			System.out.println("Veuillez entrer le nom du fichier ( -f filename)");
+		if(filename.length < 1){
+			System.out.println("Veuillez entrer le nom du fichier");
 			return;
 		}
-		parseFile(filename[1]);
+		parseFile(filename[0]);
 		
 		Model model = new Model("Museum monitoring");
 		

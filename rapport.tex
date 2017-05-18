@@ -17,6 +17,8 @@
 \section{Problèmes d'échecs}
 
 \subsection{CPS}
+Les CSP pour les question 1 et 2 se trouvent dans \textbf{quest1-2.pdf}.\\
+
 Soient n, k1, k2 et k3 des entiers positifs.
 Dans le problème d'échecs, nous considérons un échiquier de dimensions \textbf{n x n}, ainsi que \textbf{k1} tours, \textbf{k2} fous et \textbf{k3} cavaliers. 
 
@@ -97,7 +99,7 @@ $$u4_{i,j} = \{(v_{1}, ..., v_{2m}) \in  D^{2m} \mid \exists k \in \{k1+k2+1, ..
 Enfin le dernier ensemble exprime qu'il y a un cavalier aux déplacements \textbf{L} d'une case se trouvant aux indices \textbf{\{i, j\}}. Avec le même raisonnement qu'avant, les indices \textbf{k}, des cavaliers, sont compris entre \textbf{k1+k2+1} et \textbf{m}. De plus, pour faire les déplacements en \textbf{L} nous avons besoin de deux autres indices, appelés ici \textbf{p} et \textbf{l}.
 
 \subsection{ChocoSolver}
-
+La question 3 et la question bonus ont été implémentées dans le projet \textbf{CSPSolver}. 
 \subsubsection{Question 3}
 Cette question nous demande d'implémenter un programme qui, étant donné une instance du problème de domination ou d'indépendance, en calcule une solution à l'aide de ChocoSolver.\\
 
@@ -140,7 +142,21 @@ Une fois que nous récupérons ces données, nous appliquons à la pieceGeneriqu
 Nous avons utilisé le model.scalar() afin de pouvoir implémenter les contraintes des équations linéaires. Le model.scalar() nous permet en effet d'y mettre en paramètres une liste les IntVar, une liste des différentes varaibles \textbf{x},\textbf{y}, \textbf{i} et \textbf{j}, ainsi que l'opérateur, et le coefficient. Afin de respecter le format du model.scalar(), nous passons le coefficient de l'autre côté de l'équation, et donc le mettons en négatif.
 	
 \subsubsection{Question 4}
+L'implémentation de cette quetsion se trouve dans le projet \textbf{HorsemanMinimizer}. Le CSP s'y trouve dans le fichier \textbf{quest4.pdf}. \\
 
+Pour ce problème, un entier n est passé en paramètre, qui indique la taille de l'échiquier. Il nous a été demandé de minimiser le nombre de cavaliers pouvant dominer l'échiquier. La sortie comprend le nombre minimum de cavaliers requit ainsi qu'un tableau affichant les positions de ces cavaliers sur l'échiquier.
+
+Nous commençons par initialisé toutes les cases du tableau. Ensuite, nous vérifions que chaque case respecte bien la contrainte d'être soit dominée, soit occupée par un cavalier. 
+
+L'ensemble des contraintes est défini comme ceci:  
+  $$ C = (y, \{z \in D^{n^2} \hspace{0.1cm} | \hspace{0.1cm} \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n, \exists k \in \{2,-2\}, \exists l \in \{1,-1\},$$
+ $$ a_{i+k,j+l}=1 \hspace{0.1cm} \vee \hspace{0.1cm} a_{i+l,j+k}=1 \hspace{0.1cm} \vee \hspace{0.1cm} a_{i,j)} = 1\}) $$ 
+ 
+ Comme dans les premières questions, le \textbf{k} représente 2 déplacements d'un cavalier dans un sens, suivit d'un déplacement perpendiculaire exprimé par \textbf{l}. 
+ 
+ Une fois que ces contraintes sont rajoutées dans le model, il faut minimiser le nombre de cavalier. Nous faisons d'abord la somme de cheveliers grâce a model.sum(). Puis, chocoSolver propose un model.setObjective(minimise), afin de minimiser le problème.\\
+ 
+ Nous itérons le problème jusqu'à avoir la meilleure solution. 
 \section{Surveillance de musée}
 \end{document}
 

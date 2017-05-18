@@ -42,8 +42,11 @@ public class HorseMinimizer {
 
 	public static void main(String[] args){
 		
-		// taille pour test
-		n = 5;
+		if(args.length < 1){
+			System.out.println("Veuillez entrer la taille de l'échiquier");
+			return;
+		}
+		n = Integer.parseInt(args[0]);
 		
 		Model model = new Model();
 		IntVar[][] cases = new IntVar[n][n];
