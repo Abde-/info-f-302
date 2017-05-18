@@ -23,7 +23,7 @@
 \section{Problèmes d'échecs}
 
 \subsection{CSP}
-Les CSP pour les question 1 et 2 se trouvent dans \textbf{quest1-2.pdf}.\\
+Les CSP pour les questions 1 et 2 se trouvent dans \textbf{quest1-2.pdf}.\\
 
 Soient n, k1, k2 et k3 des entiers positifs.
 Dans le problème d'échecs, nous considérons un échiquier de dimensions \textbf{n x n}, ainsi que \textbf{k1} tours, \textbf{k2} fous et \textbf{k3} cavaliers. 
@@ -258,16 +258,27 @@ Voici quelques exemples:
  	\begin{center}
  		 	 \includegraphics[width=75mm,scale=0.8]{./CSPdep.png}
  	\end{center}
-\item Une implémentation de la question bonus avec un échiquier de dimension 5 x 5 , 2 tours, 1 fous, 2 cavaliers et 2 pièces génriques. Les équations linéaires de ces pièces génériques se trouvent dans le fichier pieceGen.txt.
+\item Une implémentation de la question bonus, pour le problème d'indépendance, avec un échiquier de dimension 5 x 5 , 2 tours, 1 fous, 2 cavaliers et 2 pièces génriques. Les équations linéaires de ces pièces génériques se trouvent dans le fichier pieceGen.txt.
  	\begin{center}
  		 	 \includegraphics[width=75mm,scale=0.8]{./CSPgen.png}
  	\end{center}
+ 	\begin{itemize}
+ 	\item Le fichier pieceGen.txt fournit par l'utilisateur prend cette forme :
+ 	 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./pieceGen.png}
+ 	\end{center}
+ 	\end{itemize}
 \item Pour la question4, minimisation des cavaliers, nous devons entrer en paramètre la taille de l'échiquier.
  	\begin{center}
  		 	 \includegraphics[width=75mm,scale=0.8]{./Horsemin.png}
+ 	\end{center}`
+\item La dernière question prend en paramètre le nom du fichier contenant l'échiquier. Le code renvoie affiche toute   les solutions jusqu'à atteindre l'optimale, celle qui utilise le moins de caméra. 
+ 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./musee1.png}
+ 	\end{center}
+ 	\begin{center}
+ 		 	 \includegraphics[width=75mm,scale=0.8]{./musee2.png}
  	\end{center}
 \end{itemize}
 
-
-\subsection{Analyse}
 \end{document}
