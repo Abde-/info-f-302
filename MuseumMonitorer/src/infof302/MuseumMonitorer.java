@@ -25,6 +25,9 @@ public class MuseumMonitorer {
 	private static int OUEST = 4;
 	private static IntVar[][] camerasorient;
 	private static IntVar[][] camerasexist;
+	private static Constraint[] sudconts;
+	private static Constraint[] ouestconts;
+	private static Constraint[] estconts;
 	
 	private static boolean[][] murs = null;
 	private static int n = 0;
@@ -109,10 +112,10 @@ public class MuseumMonitorer {
 			}
 		}
 		
-		// la somme de chevaliers
+		// la somme des caméras
 		model.sum(cases_to_minimize, "=", minimize).post();
 		
-		// on minimise le nombre maximum de chevaliers
+		// on minimise le nombre maximum de caméras
 		model.setObjective(Model.MINIMIZE, minimize);
 		
 		// trouver solution
@@ -126,6 +129,10 @@ public class MuseumMonitorer {
 		
 	}
 
+	/**
+	 * contrainte disant que chaque pièce doit être occupée par une caméra ou dominée par une caméra
+	 * @param model
+	 */
 	private static void constraintOnCameras(Model model) {
 		for(int i = 0; i < n; ++i){
 			for(int j = 0; j < m; ++j){
@@ -171,125 +178,15 @@ public class MuseumMonitorer {
 					
 					
 					// il existe au moins une piece au sud qui pointe vers le nord -> on rajoute
-					if(nordconts.length > 0)
-					contraintes = addElement(contraintes, model.or(nordconts));
-					
-					
-					
-					Constraint[] sudconts = new Constraint[]{};
-					for(int k = 0; k < i; ++k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k+1; l < i; ++l){
-							if(murs[l][j]){
-								flagL = false;
-								break;
-							}
-							
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[l][j],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL ){
-							if(contsL.length > 0)
-								sudconts =
-								addElement(sudconts,
-										model.and(
-											model.arithm(camerasorient[k][j], "=", SUD),
-											model.and(contsL)
-											)
-										);
-							else
-								sudconts =
-								addElement(sudconts,
-								model.arithm(camerasorient[k][j], "=", SUD));
-						}
-					}
+					contraintes = camSouthNorth(model, i, j, contraintes, nordconts);
 					
 					// il existe au moins une piece au nord qui pointe vers le sud -> on rajoute
-					if(sudconts.length > 0)
-					contraintes = addElement(contraintes, model.or(sudconts));
-					
-					
-					Constraint[] estconts = new Constraint[]{};
-					for(int k = 0; k < j; ++k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k+1; l < j; ++l){
-							if(murs[i][l]){
-								flagL = false;
-								break;
-							}
-
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[i][l],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL){
-							if(contsL.length > 0)
-								estconts =
-								addElement(estconts,
-										model.and(
-											model.arithm(camerasorient[i][k], "=", EST),
-											model.and(contsL)
-											)
-										);
-							else
-								estconts =
-								addElement(estconts,
-								model.arithm(camerasorient[i][k], "=", EST));
-						}
-					}
+					contraintes = camNorthSouth(model, i, j, contraintes);
 					
 					// il existe au moins une piece au ouest qui pointe vers l'est -> on rajoute
-					if(estconts.length > 0)
-					contraintes = addElement(contraintes, model.or(estconts));
+					contraintes = camWestEast(model, i, j, contraintes);
 					
-					
-					
-					Constraint[] ouestconts = new Constraint[]{};
-					for(int k = m-1; k > j; --k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k-1; l > j; --l){
-							if(murs[i][l]){
-								flagL = false;
-								break;
-							}
-							
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[i][l],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL){
-							if(contsL.length > 0)
-								ouestconts =
-								addElement(ouestconts,
-										model.and(
-											model.arithm(camerasorient[i][k], "=", OUEST),
-											model.and(contsL)
-											)
-										);
-							else
-								ouestconts =
-									addElement(ouestconts,
-											model.arithm(camerasorient[i][k], "=", OUEST));
-						}
-					}
-					
-					// il existe au moins une piece à l'est qui pointe vers le ouest -> on rajoute
+					// il existe au moins une piece à l'est qui pointe vers l'ouest -> on rajoute
 					if(ouestconts.length > 0)
 					contraintes = addElement(contraintes, model.or(ouestconts));
 					
@@ -308,6 +205,134 @@ public class MuseumMonitorer {
 		}
 	}
 
+	private static Constraint[] camWestEast(Model model, int i, int j, Constraint[] contraintes) {
+		if(estconts.length > 0)
+		contraintes = addElement(contraintes, model.or(estconts));
+							
+		ouestconts = new Constraint[]{};
+		for(int k = m-1; k > j; --k){
+			
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k-1; l > j; --l){
+				if(murs[i][l]){
+					flagL = false;
+					break;
+				}
+				
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[i][l],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL){
+				if(contsL.length > 0)
+					ouestconts =
+					addElement(ouestconts,
+							model.and(
+								model.arithm(camerasorient[i][k], "=", OUEST),
+								model.and(contsL)
+								)
+							);
+				else
+					ouestconts =
+						addElement(ouestconts,
+								model.arithm(camerasorient[i][k], "=", OUEST));
+			}
+		}
+		return contraintes;
+	}
+
+	private static Constraint[] camNorthSouth(Model model, int i, int j, Constraint[] contraintes) {
+		if(sudconts.length > 0)
+		contraintes = addElement(contraintes, model.or(sudconts));
+		
+		
+		estconts = new Constraint[]{};
+		for(int k = 0; k < j; ++k){
+			
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k+1; l < j; ++l){
+				if(murs[i][l]){
+					flagL = false;
+					break;
+				}
+
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[i][l],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL){
+				if(contsL.length > 0)
+					estconts =
+					addElement(estconts,
+							model.and(
+								model.arithm(camerasorient[i][k], "=", EST),
+								model.and(contsL)
+								)
+							);
+				else
+					estconts =
+					addElement(estconts,
+					model.arithm(camerasorient[i][k], "=", EST));
+			}
+		}
+		return contraintes;
+	}
+
+	private static Constraint[] camSouthNorth(Model model, int i, int j, Constraint[] contraintes,
+			Constraint[] nordconts) {
+		if(nordconts.length > 0)
+		contraintes = addElement(contraintes, model.or(nordconts));
+		
+		
+		
+		sudconts = new Constraint[]{};
+		for(int k = 0; k < i; ++k){
+			
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k+1; l < i; ++l){
+				if(murs[l][j]){
+					flagL = false;
+					break;
+				}
+				
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[l][j],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL ){
+				if(contsL.length > 0)
+					sudconts =
+					addElement(sudconts,
+							model.and(
+								model.arithm(camerasorient[k][j], "=", SUD),
+								model.and(contsL)
+								)
+							);
+				else
+					sudconts =
+					addElement(sudconts,
+					model.arithm(camerasorient[k][j], "=", SUD));
+			}
+		}
+		return contraintes;
+	}
+
+	/**
+	 * contrainte disant qu'il ne peut y avoir de caméras dans les murs
+	 * @param model
+	 */
 	private static void noCamInWalls(Model model) {
 		for(int i = 0; i < n; ++i){
 			for(int j = 0; j < m; ++j){
@@ -318,6 +343,10 @@ public class MuseumMonitorer {
 		}
 	}
 
+	/**
+	 * indique l'existance des caméras
+	 * @param model
+	 */
 	private static void camExistence(Model model) {
 		camerasexist = new IntVar[n][m];
 		for(int i = 0; i < n; ++i){
@@ -327,6 +356,10 @@ public class MuseumMonitorer {
 		}
 	}
 
+	/**
+	 * indique l'orientation des cameras
+	 * @param model
+	 */
 	private static void camOrientation(Model model) {
 		camerasorient = new IntVar[n][m];
 		for(int i = 0; i < n; ++i){
@@ -337,7 +370,7 @@ public class MuseumMonitorer {
 	}
 
 	/**
-	 * Fonction pour parser le fichier avec la map -> convertir * en TRUE et espace en FALSE (comme exemple pour TEST).
+	 * Fonction pour parser le fichier avec la map -> convertir * en TRUE et espace en FALSE.
 	 * 
 	 * @param filename
 	 * @return board
@@ -366,6 +399,10 @@ public class MuseumMonitorer {
 		fileReader.close();
 	}
 	
+	/**
+	 * affichage de l'échiquier avec les caméras
+	 * @param cameras
+	 */
 	private static void printSolution(IntVar[][] cameras) {
 		for(int k = 0; k < m+2; ++k){
 			System.out.print("*");

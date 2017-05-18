@@ -156,7 +156,7 @@ L'ensemble des contraintes est défini comme ceci :
  
  Une fois que ces contraintes sont rajoutées dans le model, il faut minimiser le nombre de cavalier. Nous faisons d'abord la somme de chevaliers grâce au model.sum(). Puis, chocoSolver propose un model.setObjective(minimise), afin de minimiser le problème.\\
  
- Nous itérons le problème jusqu'à avoir la meilleure solution.					
+ Nous itérons le problème jusqu'à avoir la meilleure solution, et affichons toutes les possibilités.					
  
 \section{Surveillance de musée}
 Le code pour la dernière question, sur la surveillance de musée, se trouve dans \textbf{MuseumMonitorer}. Le CSP de cette question, quand à lui, est dans le fichier \textbf{musee.pdf}.\\
@@ -164,12 +164,14 @@ Le code pour la dernière question, sur la surveillance de musée, se trouve dan
 \subsection{CPS}
 
 \subsection{ChocoSolver}
-L'utilisateur doit entré en paramètre le nom du fichier dans lequel se trouve un tableau rectangulaire représentant la topologie de la salle à surveiller. 
+L'utilisateur doit entrer en paramètre le nom du fichier dans lequel se trouve un tableau rectangulaire représentant la topologie de la salle à surveiller. 
 Une case est soit vide, soit occupée par un obstacle. Un obstacle est symbolisé par \textbf{*}. De plus, les 4 murs sont toujours des obstacles. 
-La sortie du code donne le nombre minimal de capteurs nécessaires, ainsi que d'un tableau montrant la position des caméras. \\
+La sortie du code donne le nombre minimal de capteurs nécessaires, ainsi qu'un tableau montrant la position des caméras. \\
 
-Dans l'implémentation du problème,  nous commençons par parser le fichier mis en paramètre par l'utilisateur. Nous enregistrons dans une variable \textbf{murs}, contenant des booleans, le tableau. Nous travaillons avec des booleans, et donc s'il y a un obstable a une position \{x, y\}, nous mettons le boolean à true, false sinon.
+Dans l'implémentation du problème, nous commençons par parser le fichier mis en paramètre par l'utilisateur. Nous enregistrons dans une variable \textbf{murs}, contenant des booleans, le tableau. Nous travaillons avec des booleans, et donc s'il y a un obstacle a une position \{x, y\}, nous mettons le boolean à true, false sinon.\\
 
+Nous devons donc minimiser le nombre de caméra présentes dans la pièce d'attente. Pour cela, nous devons respecter plusieurs contraintes. Premièrement, nous devons faire appliquer au model qu'une caméra existe seulement si son orientation n'est pas nulle, elle doit aller vers le nord, le sud, l'est ou l'ouest. Ensuite, il ne peut y avoir de caméra dans les murs, elles doivent être dans un espace vide. Finalement, chaque case doit être dominée ou occupée par une caméra. Afin de respecter cette dernière contrainte, pour chaque case nous vérifions pour ces 4 directions si une caméra y pointe.
 
+Tout comme pour la question 4, nous itérerons toutes les solutions possibles jusqu'à avoir la meilleure.
 
 \end{document}
