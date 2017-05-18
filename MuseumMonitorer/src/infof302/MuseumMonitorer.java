@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,12 +86,13 @@ public class MuseumMonitorer {
 					model.and(
 						model.arithm(camerasorient[i][j], "=", 0),
 						model.arithm(camerasexist[i][j], "=", 0)
-						),
+					),
 					model.and(
 						model.arithm(camerasorient[i][j], "!=", 0),
 						model.arithm(camerasexist[i][j], "=", 1)
-						)
+					)
 				).post();
+				
 			}
 		}
 		
@@ -104,6 +106,7 @@ public class MuseumMonitorer {
 			}
 		}
 		
+		
 		// troisième contrainte: chaque pièce doit être occupée par une caméra ou dominée par une
 		for(int i = 0; i < n; ++i){
 			for(int j = 0; j < m; ++j){
@@ -111,166 +114,25 @@ public class MuseumMonitorer {
 				if(!murs[i][j]){
 					Constraint[] contraintes = new Constraint[]{};
 					
-					
-					Constraint[] nordconts = new Constraint[]{};
-					for(int k = n-1; k > i; --k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k-1; l > i; --l){
-							if(murs[l][j]){
-								flagL = false;
-								break;
-							}
-							
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[l][j],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL){
-							if (contsL.length > 0 )
-								nordconts = 
-								addElement(nordconts,model.and(
-										model.arithm(camerasorient[k][j], "=", NORD),
-										model.and(contsL)
-										)
-									);
-							
-							else
-								nordconts = 
-									addElement(nordconts,
-											model.arithm(camerasorient[k][j], "=", NORD));
-						}
-					}
-					
-					
-					
+					Constraint[] nordconts = checkDominatedSouth(model,i,j,camerasexist,camerasorient);
 					// il existe au moins une piece au sud qui pointe vers le nord -> on rajoute
 					if(nordconts.length > 0)
 					contraintes = addElement(contraintes, model.or(nordconts));
 					
-					
-					
-					Constraint[] sudconts = new Constraint[]{};
-					for(int k = 0; k < i; ++k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k+1; l < i; ++l){
-							if(murs[l][j]){
-								flagL = false;
-								break;
-							}
-							
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[l][j],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL ){
-							if(contsL.length > 0)
-								sudconts =
-								addElement(sudconts,
-										model.and(
-											model.arithm(camerasorient[k][j], "=", SUD),
-											model.and(contsL)
-											)
-										);
-							else
-								sudconts =
-								addElement(sudconts,
-								model.arithm(camerasorient[k][j], "=", SUD));
-						}
-					}
-					
+					Constraint[] sudconts = checkDominatedNorth(model,i,j,camerasexist,camerasorient);
 					// il existe au moins une piece au nord qui pointe vers le sud -> on rajoute
 					if(sudconts.length > 0)
 					contraintes = addElement(contraintes, model.or(sudconts));
 					
-					
-					Constraint[] estconts = new Constraint[]{};
-					for(int k = 0; k < j; ++k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k+1; l < j; ++l){
-							if(murs[i][l]){
-								flagL = false;
-								break;
-							}
-
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[i][l],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL){
-							if(contsL.length > 0)
-								estconts =
-								addElement(estconts,
-										model.and(
-											model.arithm(camerasorient[i][k], "=", EST),
-											model.and(contsL)
-											)
-										);
-							else
-								estconts =
-								addElement(estconts,
-								model.arithm(camerasorient[i][k], "=", EST));
-						}
-					}
-					
-					// il existe au moins une piece au ouest qui pointe vers l'est -> on rajoute
-					if(estconts.length > 0)
-					contraintes = addElement(contraintes, model.or(estconts));
-					
-					
-					
-					Constraint[] ouestconts = new Constraint[]{};
-					for(int k = m-1; k > j; --k){
-						
-						boolean flagL = true;
-						// les contraintes pour le L qui se trouve entre la piece et le k
-						Constraint[] contsL = new Constraint[]{};
-						for(int l = k-1; l > j; --l){
-							if(murs[i][l]){
-								flagL = false;
-								break;
-							}
-							
-							contsL = addElement(contsL,
-									model.arithm(camerasexist[i][l],"=",0)
-									);
-						}
-						
-						// si jamais toutes les cases de L à K sont libres
-						if (flagL){
-							if(contsL.length > 0)
-								ouestconts =
-								addElement(ouestconts,
-										model.and(
-											model.arithm(camerasorient[i][k], "=", OUEST),
-											model.and(contsL)
-											)
-										);
-							else
-								ouestconts =
-									addElement(ouestconts,
-											model.arithm(camerasorient[i][k], "=", OUEST));
-						}
-					}
-					
+					Constraint[] ouestconts = checkDominatedEast(model,i,j,camerasexist,camerasorient);
 					// il existe au moins une piece à l'est qui pointe vers le ouest -> on rajoute
 					if(ouestconts.length > 0)
 					contraintes = addElement(contraintes, model.or(ouestconts));
 					
+					Constraint[] estconts = checkDominatedWest(model,i,j,camerasexist,camerasorient);
+					// il existe au moins une piece au ouest qui pointe vers l'est -> on rajoute
+					if(estconts.length > 0)
+					contraintes = addElement(contraintes, model.or(estconts));
 					
 					// on rajoute la contrainte qu'il existe une camera la ou il est
 					if(contraintes.length > 0)
@@ -287,20 +149,19 @@ public class MuseumMonitorer {
 		
 		// convertir en array à 1D car la fonction sum prend que des array
 		// à une dimension
+		
+		ArrayList<IntVar> array = new ArrayList<>();
 		IntVar[] cases_to_minimize = new IntVar[n*m];
-		if(m < n){
-			for (int i = 0; i < n; ++i){
-				for (int j = 0; j < m; ++j){
-					cases_to_minimize[j*n+i] = camerasexist[i][j];
-				}
-			}
-		} else {
-			for (int i = 0; i < n; ++i){
-				for (int j = 0; j < m; ++j){
-					cases_to_minimize[i*n+j] = camerasexist[i][j];
-				}
+
+		for (int i = 0; i < n; ++i){
+			for (int j = 0; j < m; ++j){
+				array.add(camerasexist[i][j]);
 			}
 		}
+		
+		for (int i = 0; i < n*m; ++i)
+			cases_to_minimize[i] = array.get(i);
+	
 		
 		// la somme de chevaliers
 		model.sum(cases_to_minimize, "=", minimize).post();
@@ -310,12 +171,204 @@ public class MuseumMonitorer {
 		
 		// trouver solution
 		Solver solver = model.getSolver();
+		int optimalMin = 0;
+		int[][] optimalOrients = null;
+		
 		
 		while(solver.solve()){
-			System.out.println();
-			System.out.println(minimize.getValue());
-			printSolution(camerasorient);
+			
+			optimalMin = minimize.getValue();
+			
+			optimalOrients = new int[n][m];
+			for(int i = 0; i < n; ++i){
+				for(int j = 0; j < m; ++j){
+					optimalOrients[i][j] = camerasorient[i][j].getValue();
+				}
+			}
+			
+			if(optimalOrients != null){
+				System.out.println(optimalMin);
+				printSolution(optimalOrients);
+			}
+			
 		}
+		
+		System.out.println("\nMEILLEURE SOLUTION");
+		if(optimalOrients != null){
+			System.out.println(optimalMin);
+			printSolution(optimalOrients);
+		} else {
+			System.out.println("Pas de solution");
+		}
+		
+	}
+	
+	/**
+	 * Check s'il est dominé par le sud.
+	 * @return
+	 */
+	public static Constraint[] checkDominatedSouth(Model model, int i, int j, IntVar[][] camerasexist, IntVar[][] camerasorient){
+		Constraint[] nordconts = new Constraint[]{};
+		for(int k = n-1; k > i; --k){
+
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k-1; l > i; --l){
+				if(murs[l][j]){
+					flagL = false;
+					break;
+				}
+				
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[l][j],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL){
+				if (contsL.length > 0 )
+					nordconts = 
+					addElement(nordconts,model.and(
+							model.arithm(camerasorient[k][j], "=", NORD),
+							model.and(contsL)
+							)
+						);
+				
+				else
+					nordconts = 
+						addElement(nordconts,
+								model.arithm(camerasorient[k][j], "=", NORD));
+			}
+		}
+		return nordconts;
+		
+	}
+	
+	/**
+	 * Check s'il est dominé par le nord.
+	 * @return
+	 */
+	public static Constraint[] checkDominatedNorth(Model model, int i, int j, IntVar[][] camerasexist, IntVar[][] camerasorient){
+		Constraint[] sudconts = new Constraint[]{};
+		for(int k = 0; k < i; ++k){
+
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k+1; l < i; ++l){
+				if(murs[l][j]){
+					flagL = false;
+					break;
+				}
+				
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[l][j],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL ){
+				if(contsL.length > 0)
+					sudconts =
+					addElement(sudconts,
+							model.and(
+								model.arithm(camerasorient[k][j], "=", SUD),
+								model.and(contsL)
+								)
+							);
+				else
+					sudconts =
+					addElement(sudconts,
+					model.arithm(camerasorient[k][j], "=", SUD));
+			}
+		}
+		return sudconts;
+		
+	}
+	
+	/**
+	 * Check s'il est dominé par l'est.
+	 * @return
+	 */
+	public static Constraint[] checkDominatedEast(Model model, int i, int j, IntVar[][] camerasexist, IntVar[][] camerasorient){
+		Constraint[] ouestconts = new Constraint[]{};
+		for(int k = m-1; k > j; --k){
+
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k-1; l > j; --l){
+				if(murs[i][l]){
+					flagL = false;
+					break;
+				}
+				
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[i][l],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL){
+				if(contsL.length > 0)
+					ouestconts =
+					addElement(ouestconts,
+							model.and(
+								model.arithm(camerasorient[i][k], "=", OUEST),
+								model.and(contsL)
+								)
+							);
+				else
+					ouestconts =
+						addElement(ouestconts,
+								model.arithm(camerasorient[i][k], "=", OUEST));
+			}
+		}
+		return ouestconts;
+		
+	}
+	
+	/**
+	 * Check s'il est dominé par le ouest.
+	 * @return
+	 */
+	public static Constraint[] checkDominatedWest(Model model, int i, int j, IntVar[][] camerasexist, IntVar[][] camerasorient){
+		Constraint[] estconts = new Constraint[]{};
+		for(int k = 0; k < j; ++k){
+			
+			boolean flagL = true;
+			// les contraintes pour le L qui se trouve entre la piece et le k
+			Constraint[] contsL = new Constraint[]{};
+			for(int l = k+1; l < j; ++l){
+				if(murs[i][l]){
+					flagL = false;
+					break;
+				}
+
+				contsL = addElement(contsL,
+						model.arithm(camerasexist[i][l],"=",0)
+						);
+			}
+			
+			// si jamais toutes les cases de L à K sont libres
+			if (flagL){
+				if(contsL.length > 0)
+					estconts =
+					addElement(estconts,
+							model.and(
+								model.arithm(camerasorient[i][k], "=", EST),
+								model.and(contsL)
+								)
+							);
+				else
+					estconts =
+					addElement(estconts,
+					model.arithm(camerasorient[i][k], "=", EST));
+			}
+		}
+		
+		return estconts;
 		
 	}
 
@@ -336,7 +389,7 @@ public class MuseumMonitorer {
 		n = lines.size() - 2;
 
 		String line = bufferedReader.readLine(); //pour passer la première ligne
-		m = line.length() - 2;
+		m = line.trim().length() - 2;
 		
 		murs = new boolean[n][m];
 		for(int i=0; i<n; ++i){
@@ -349,33 +402,33 @@ public class MuseumMonitorer {
 		fileReader.close();
 	}
 	
-	private static void printSolution(IntVar[][] cameras) {
+	private static void printSolution(int[][] toPrint) {
 		for(int k = 0; k < m+2; ++k){
-			System.out.print("*");
+			System.out.print("* ");
 		}
 		System.out.println();
 		
 		for(int i = 0; i < n; ++i){
-			System.out.print("*");
+			System.out.print("* ");
 			for(int j = 0; j < m; ++j){
 				
 				if(murs[i][j])
-					System.out.print("*");
+					System.out.print("* ");
 				
 				else
 					System.out.print(
-						cameras[i][j].getValue() == NORD ? "N" : 
-							cameras[i][j].getValue() == EST ? "E" :
-								cameras[i][j].getValue() == OUEST ? "O" : 
-									cameras[i][j].getValue() == SUD ? "S" : " "
+							toPrint[i][j] == NORD ? "N " : 
+								toPrint[i][j] == EST ? "E " :
+									toPrint[i][j] == OUEST ? "O " : 
+										toPrint[i][j] == SUD ? "S " : "  "
 						);
 			}
-			System.out.print("*");
+			System.out.print("* ");
 			System.out.println();
 		}
 		
 		for(int k = 0; k < m+2; ++k){
-			System.out.print("*");
+			System.out.print("* ");
 		}
 		System.out.println();
 
