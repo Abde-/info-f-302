@@ -1,0 +1,91 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx} % to include pictures
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{breqn}
+\usepackage{amsfonts}
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2.5cm]{geometry}
+
+% Fancy layout
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% Footer
+\fancyfoot[C]{}
+\fancyfoot[R]{Page \thepage}
+% Ligne
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\section {Problème 2 (musée)}
+[ÉTANT DONNÉ INSTANCE $S = (a_{1,1},\dots,a_{1,n},\dots,a_{2,1},a_{n,n}) \in \{0,1\}^{n^2}$]
+
+\subsection{Notations}
+\begin{itemize}
+\item n x n = dimension de l'échiquier
+\item $a_{i,j}$ = case (i,j) du terrain (elle est égale à 1 s'il c'est un mur 0 sinon)
+\item y = $x_{1,1},\ldots, x_{1,n},x_{2,1}, \ldots,x_{2,n}, \ldots, x_{n,n} $
+\item y' = $x'_{1,1},\ldots, x'_{1,n},x'_{2,1}, \ldots,x'_{2,n}, \ldots, x'_{n,n} $
+\item z = $v_{1,1},\ldots, v_{1,n},v_{2,1}, \ldots,v_{2,n}, \ldots, v_{n,n} $
+\item z' = $v'_{1,1},\ldots, v'_{1,n},v'_{2,1}, \ldots,v'_{2,n}, \ldots, v'_{n,n} $
+\item yy' = concaténation de y et y'
+\item zz' = concaténation de z et z'
+
+\end{itemize}
+
+\subsection{Variables}
+
+$$X = X_1 \cup X_2$$
+
+Variables pour indiquer la diréction de la caméra qui se trouve dans cette case.
+$$X_1 = \{x_{i,j} | \hspace{0.1cm} \forall_{i} 1 \leq i \leq n \hspace{0.1cm} \forall_{j} 1 \leq j \leq n\}$$
+
+Variables par case pour indiquer que cette case est occupée par une caméra.
+$$X_2 = \{x'_{i,j} | \hspace{0.1cm} \forall_{i} 1 \leq i \leq n \hspace{0.1cm} \forall_{j} 1 \leq j \leq n\}$$
+
+\subsection{Domaines}
+
+$$D_1 = \{Nord, Sud, Est, Ouest, \emptyset\}$$
+
+$$D_2 = \{0,1\}$$
+
+\subsection{Contraintes}
+La question 1 est l'union de l’ensemble de contraintes:
+
+$$C = \{c_{1} \cup c_{2} \cup c_{3} \cup c_{4}\} $$
+tel que:
+\begin{itemize}
+\item $c_{1}$ est la contrainte pour indiquer que $x'_{i,j} = 1$ ssi la caméra se trouve aux memes coordonnées.
+  $$c_{1} = ( yy', \{ vv' \in  D_1^{n^2} \times D_2^{n^2} \mid \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n,
+  ((v_{i,j} = \emptyset \hspace{0.1cm} \wedge \hspace{0.1cm} v'_{i,j} = 0)
+   \hspace{0.1cm} \vee \hspace{0.1cm}
+  (v_{i,j}  \neq \emptyset \hspace{0.1cm}\wedge \hspace{0.1cm} v_{i,j} = 1)) \} ) $$
+   
+\item $c_{2}$ indique qu'une caméra ne peut pas être là où il y a un mur 
+  $$c_{2} = ( y', \{ v' \in D_2^{n^2} \mid \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n, (a_{i,j} = 1 \wedge v'_{i,j} = 0 ) \vee (a_{i,j} = 0))$$  
+
+\item $c_{3}$ indique que chaque case doit être dominée ou occupée par une case.
+
+  \begin{multline}
+    c_{3} = ( yy',\hspace{0.1cm} \{ vv' |\hspace{0.1cm} \forall \hspace{0.1cm} 1\leq i \leq n, \forall \hspace{0.1cm} 1\leq j \leq n, \hspace{0.1cm} (a_{i,j}=1) \vee (v'_{i,j} = 1) \vee \\ \Bigg(a_{i,j} = 0\hspace{0.1cm} \bigwedge \hspace{0.1cm} \bigg(
+    (\exists k \in \mathbb{Z} , (v_ {i+k,j} = Ouest \wedge (\forall 1 \leq l < k, v'_{i+l,j}=0
+    \wedge a_{i+l,j}=0))) \\
+    \bigvee \\
+    (\exists k \in \mathbb{Z} , (v_ {i-k,j} = Est \wedge (\forall 1 \leq l < k, v'_{i-l,j}=0
+    \wedge a_{i-l,j}=0))) \\
+    \bigvee \\
+    (\exists k \in \mathbb{Z} , (v_ {i,j+k} = Sud \wedge (\forall 1 \leq l < k, v'_{i,j+l}=0
+    \wedge a_{i,j+l}=0))) \\
+    \bigvee \\
+    (\exists k \in \mathbb{Z} , (v_ {i,j-k} = Nord \wedge (\forall 1 \leq l < k, v'_{i,j-l}=0
+    \wedge a_{i,j-l}=0))\bigg)
+    \Bigg)\}
+    )
+  \end{multline}
+  
+\end{itemize}
+\end{document}
