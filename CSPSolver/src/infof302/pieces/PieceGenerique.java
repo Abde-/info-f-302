@@ -7,7 +7,7 @@ import infof302.CSPSolver;
 
 /**
  * 
- * M�thode qui repr�sente une piece g�n�rique (BONUS).
+ * Méthode qui représente une piece générique (BONUS).
  *
  */
 public class PieceGenerique extends Piece{
@@ -33,7 +33,7 @@ public class PieceGenerique extends Piece{
 			
 			if(this != piece){
 				
-				// contrainte 1: checker que les 2 pieces se trouvent dans des positions diff�rentes
+				// contrainte 1: checker que les 2 pieces se trouvent dans des positions différentes
 				checkEqual(piece);
 				Constraint[] contraintes = new Constraint[]{};
 			
