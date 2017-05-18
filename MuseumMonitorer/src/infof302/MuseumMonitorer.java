@@ -1,6 +1,14 @@
 package infof302;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
@@ -21,30 +29,6 @@ public class MuseumMonitorer {
 	public static int n = 0;
 	public static int m = 0;
 	
-	//////// TEST ////////
-	static {
-		
-		n = 5;
-		m = 3;
-		murs = new boolean[][]{
-				{false,	true,	true},
-				{false,	false,	false},
-				{false,	true,	true},
-				{false,	false,	false},
-				{false,	true,	false}
-			};
-		/*
-		n = 2;
-		murs = new boolean[][]{
-				{false,	false},
-				{false,	false}	
-			};
-		*/
-	}
-	////////TEST ////////
-	
-	
-	
 	/**
 	 * Méthode pour rajouter élement e à l'array a.
 	 * 
@@ -62,11 +46,16 @@ public class MuseumMonitorer {
 	 * On passe le nom du fichier où se trouve la carte en paramètre.
 	 * 
 	 * @param filename
+	 * @throws IOException 
+	 * @throws NumberFormatException 
 	 */
-	public static void main(String[] filename) {
-		
-		//parseFile(filename);
-		
+	public static void main(String[] filename) throws NumberFormatException, IOException {
+		//check file exists
+		if(filename.length < 2){
+			System.out.println("Veuillez entrer le nom du fichier ( -f filename)");
+			return;
+		}
+		parseFile(filename[1]);
 		
 		Model model = new Model("Museum monitoring");
 		
@@ -334,15 +323,40 @@ public class MuseumMonitorer {
 	 * Fonction pour parser le fichier avec la map -> convertir * en TRUE et espace en FALSE (comme exemple pour TEST).
 	 * 
 	 * @param filename
-	 * @return
+	 * @return board
+	 * @throws IOException 
+	 * @throws NumberFormatException 
 	 */
-	private static int[][] parseFile(String[] filename) {
-		// TODO Auto-generated method stub
-		return null;
+	private static void parseFile(String filename) throws NumberFormatException, IOException {
+		File file = new File(filename);
+		FileReader fileReader = new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		
+		List<String> lines = Files.readAllLines(Paths.get(filename), Charset.defaultCharset());
+		n = lines.size() - 2;
+
+		String line = bufferedReader.readLine(); //pour passer la première ligne
+		m = line.length() - 2;
+		
+		murs = new boolean[n][m];
+		for(int i=0; i<n; ++i){
+			line = bufferedReader.readLine();
+			String[] data = line.split("");
+			for(int j=1; j<m+1; ++j){
+				murs[i][j-1] = (data[j].equals("*") ? true : false);
+			}
+		}
+		fileReader.close();
 	}
 	
-	private static int[][] printSolution(IntVar[][] cameras) {
+	private static void printSolution(IntVar[][] cameras) {
+		for(int k = 0; k < m+2; ++k){
+			System.out.print("*");
+		}
+		System.out.println();
+		
 		for(int i = 0; i < n; ++i){
+			System.out.print("*");
 			for(int j = 0; j < m; ++j){
 				
 				if(murs[i][j])
@@ -356,8 +370,14 @@ public class MuseumMonitorer {
 									cameras[i][j].getValue() == SUD ? "S" : " "
 						);
 			}
+			System.out.print("*");
 			System.out.println();
 		}
-		return null;
+		
+		for(int k = 0; k < m+2; ++k){
+			System.out.print("*");
+		}
+		System.out.println();
+
 	}
 }
