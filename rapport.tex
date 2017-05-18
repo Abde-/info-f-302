@@ -142,21 +142,34 @@ Une fois que nous récupérons ces données, nous appliquons à la pieceGeneriqu
 Nous avons utilisé le model.scalar() afin de pouvoir implémenter les contraintes des équations linéaires. Le model.scalar() nous permet en effet d'y mettre en paramètres une liste les IntVar, une liste des différentes varaibles \textbf{x},\textbf{y}, \textbf{i} et \textbf{j}, ainsi que l'opérateur, et le coefficient. Afin de respecter le format du model.scalar(), nous passons le coefficient de l'autre côté de l'équation, et donc le mettons en négatif.
 	
 \subsubsection{Question 4}
-L'implémentation de cette quetsion se trouve dans le projet \textbf{HorsemanMinimizer}. Le CSP s'y trouve dans le fichier \textbf{quest4.pdf}. \\
+L'implémentation de cette question se trouve dans le projet \textbf{HorsemanMinimizer}. Le CSP s'y trouve dans le fichier \textbf{quest4.pdf}. \\
 
 Pour ce problème, un entier n est passé en paramètre, qui indique la taille de l'échiquier. Il nous a été demandé de minimiser le nombre de cavaliers pouvant dominer l'échiquier. La sortie comprend le nombre minimum de cavaliers requit ainsi qu'un tableau affichant les positions de ces cavaliers sur l'échiquier.
 
 Nous commençons par initialisé toutes les cases du tableau. Ensuite, nous vérifions que chaque case respecte bien la contrainte d'être soit dominée, soit occupée par un cavalier. 
 
-L'ensemble des contraintes est défini comme ceci:  
+L'ensemble des contraintes est défini comme ceci :  
   $$ C = (y, \{z \in D^{n^2} \hspace{0.1cm} | \hspace{0.1cm} \forall \hspace{0.1cm} 1 \leq i \leq n, \forall \hspace{0.1cm} 1 \leq j \leq n, \exists k \in \{2,-2\}, \exists l \in \{1,-1\},$$
  $$ a_{i+k,j+l}=1 \hspace{0.1cm} \vee \hspace{0.1cm} a_{i+l,j+k}=1 \hspace{0.1cm} \vee \hspace{0.1cm} a_{i,j)} = 1\}) $$ 
  
  Comme dans les premières questions, le \textbf{k} représente 2 déplacements d'un cavalier dans un sens, suivit d'un déplacement perpendiculaire exprimé par \textbf{l}. 
  
- Une fois que ces contraintes sont rajoutées dans le model, il faut minimiser le nombre de cavalier. Nous faisons d'abord la somme de cheveliers grâce a model.sum(). Puis, chocoSolver propose un model.setObjective(minimise), afin de minimiser le problème.\\
+ Une fois que ces contraintes sont rajoutées dans le model, il faut minimiser le nombre de cavalier. Nous faisons d'abord la somme de chevaliers grâce au model.sum(). Puis, chocoSolver propose un model.setObjective(minimise), afin de minimiser le problème.\\
  
- Nous itérons le problème jusqu'à avoir la meilleure solution. 
+ Nous itérons le problème jusqu'à avoir la meilleure solution.					
+ 
 \section{Surveillance de musée}
-\end{document}
+Le code pour la dernière question, sur la surveillance de musée, se trouve dans \textbf{MuseumMonitorer}. Le CSP de cette question, quand à lui, est dans le fichier \textbf{musee.pdf}.\\
 
+\subsection{CPS}
+
+\subsection{ChocoSolver}
+L'utilisateur doit entré en paramètre le nom du fichier dans lequel se trouve un tableau rectangulaire représentant la topologie de la salle à surveiller. 
+Une case est soit vide, soit occupée par un obstacle. Un obstacle est symbolisé par \textbf{*}. De plus, les 4 murs sont toujours des obstacles. 
+La sortie du code donne le nombre minimal de capteurs nécessaires, ainsi que d'un tableau montrant la position des caméras. \\
+
+Dans l'implémentation du problème,  nous commençons par parser le fichier mis en paramètre par l'utilisateur. Nous enregistrons dans une variable \textbf{murs}, contenant des booleans, le tableau. Nous travaillons avec des booleans, et donc s'il y a un obstable a une position \{x, y\}, nous mettons le boolean à true, false sinon.
+
+
+
+\end{document}

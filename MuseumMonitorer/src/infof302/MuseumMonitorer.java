@@ -50,7 +50,7 @@ public class MuseumMonitorer {
 	 * @throws NumberFormatException 
 	 */
 	public static void main(String[] filename) throws NumberFormatException, IOException {
-		//check file exists
+		//check if file in param
 		if(filename.length < 1){
 			System.out.println("Veuillez entrer le nom du fichier");
 			return;
