@@ -33,7 +33,9 @@ Ces pièces ont une différente manière de se déplacer. Les tours peuvent alle
 Nous pouvons compter deux problèmes dans les problèmes d'échecs, le problème d'indépendance ainsi que le problème de domination.
 \begin{itemize}
 \item Le problème d'indépendance consiste à déterminer s'il est possible d'assigner à chacune des pièces une position distincte sur l'échiquier de sorte qu'aucune pièce ne menace une autre pièce.
-\item Le problème de domination consiste à déterminer s'il est possible d'assigner à chacune des pièces une position distincte sur l'échiquier de sorte que chaque case soit occupée ou menacée par au moins une pièce. \\
+\item Le problème de domination consiste à déterminer s'il est possible d'assigner à chacune des pièces une position distincte sur l'échiquier de sorte que chaque case soit occupée ou menacée par au moins une pièce. 
+
+De plus, nous ne considérons pas des pièces comme obtacles à d'autres pièces, c'est-à-dire que pour dominer une case, une pièce peut passer par dessus une autre.\\
 \end{itemize}
 
 Afin d'exprimer ces deux problèmes par un CSP équivalent, nous avons commencé par écrire les variables, le domaine ainsi que les notations utilisées dans les contraintes pour ceux-ci.

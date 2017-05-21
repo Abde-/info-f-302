@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,7 +89,6 @@ public class MuseumMonitorer {
 			}
 		}
 		
-		
 		// deuxieme contrainte: il ne peut pas avoir des caméras dans les murs
 		noCamInWalls(model);
 		
@@ -97,19 +97,17 @@ public class MuseumMonitorer {
 		
 		// convertir en array à 1D car la fonction sum prend que des array
 		// à une dimension
+		ArrayList<IntVar> cameras = new ArrayList<>();
 		IntVar[] cases_to_minimize = new IntVar[n*m];
-		if(m < n){
-			for (int i = 0; i < n; ++i){
-				for (int j = 0; j < m; ++j){
-					cases_to_minimize[j*n+i] = camerasexist[i][j];
-				}
+		
+		for (int i = 0; i < n; ++i){
+			for (int j = 0; j < m; ++j){
+				cameras.add(camerasexist[i][j]);
 			}
-		} else {
-			for (int i = 0; i < n; ++i){
-				for (int j = 0; j < m; ++j){
-					cases_to_minimize[i*n+j] = camerasexist[i][j];
-				}
-			}
+		}
+		
+		for (int i = 0; i < n*m; ++i){
+			cases_to_minimize[i] = cameras.get(i);
 		}
 		
 		// la somme des caméras
